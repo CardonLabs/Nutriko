@@ -1,0 +1,53 @@
+
+<section class="section px-0 py-0 is-fluid">
+
+  <div class="nav-item-label">
+    <a mat-button [routerLink]="">Add</a>
+    <a mat-button [routerLink]="">Remove</a>
+    <a mat-button [routerLink]="">Modify</a>
+  </div>
+  <mat-divider></mat-divider>
+
+</section>
+
+
+<section class="section">
+
+  <div class="container">
+
+    <table mat-table [dataSource]="plans">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+    
+      <!-- Position Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let plan"> {{plan.name}} </td>
+      </ng-container>
+    
+      <!-- Name Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> description </th>
+        <td mat-cell *matCellDef="let plan"> {{plan.description}} </td>
+      </ng-container>
+    
+      <!-- Weight Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> Price </th>
+        <td mat-cell *matCellDef="let plan"> {{plan.details.price}} </td>
+      </ng-container>
+    
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="duration">
+        <th mat-header-cell *matHeaderCellDef> Duration </th>
+        <td mat-cell *matCellDef="let plan"> {{plan.details.duration}} </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+
+</section>

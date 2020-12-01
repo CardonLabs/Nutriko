@@ -16,6 +16,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { NuToolbarComponent } from './core/nu-toolbar/nu-toolbar.component';
 import { NuSidenavComponent } from './core/nu-sidenav/nu-sidenav.component';
 import { PlansComponent } from './nu/plans/plans.component';
+import { RecipesComponent } from './nu/recipes/recipes.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -23,7 +27,8 @@ import { PlansComponent } from './nu/plans/plans.component';
     AppComponent,
     NuToolbarComponent,
     NuSidenavComponent,
-    PlansComponent
+    PlansComponent,
+    RecipesComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,10 @@ import { PlansComponent } from './nu/plans/plans.component';
     LayoutModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

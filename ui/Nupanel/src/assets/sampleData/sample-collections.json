@@ -1,0 +1,12 @@
+[
+    {
+       "id":101,
+       "name":"Plans",
+       "description":"Manage plan offerings for service"
+    },
+    {
+       "id":102,
+       "name":"Recipes",
+       "description":"Recips hub for adding or removing recipes"
+    }
+ ]

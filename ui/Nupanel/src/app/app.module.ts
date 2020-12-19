@@ -20,6 +20,8 @@ import { RecipesComponent } from './nu/recipes/recipes.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MockerComponent } from './mock/mocker/mocker.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -28,7 +30,8 @@ import { MatInputModule } from '@angular/material/input';
     NuToolbarComponent,
     NuSidenavComponent,
     PlansComponent,
-    RecipesComponent
+    RecipesComponent,
+    MockerComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import { MatInputModule } from '@angular/material/input';
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

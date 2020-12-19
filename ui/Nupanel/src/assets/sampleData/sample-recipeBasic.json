@@ -1,0 +1,19 @@
+[
+    {
+       "id":10000,
+       "name":"Chicken Under a Brick",
+       "description":"It isn\\'t easy to cook chicken so that its skin is crisp and its interior juicy. Grilling, roasting and sauteing all have their problems. But there is an effective and easy method for getting it right, using two ovenproof skillets.",
+       "media":"",
+       "rating":3,
+       "popularity":3,
+       "background":{
+          "history":"",
+          "region":"southern",
+          "cusine":"italian"
+       },
+       "nutrition":{
+          "calories":840,
+          "carbs":45
+       }
+    }
+]

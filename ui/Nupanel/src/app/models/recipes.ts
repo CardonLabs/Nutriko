@@ -21,7 +21,22 @@ export interface IMRecipe {
     // Doing for later ** reviews: { [key: number]: {id: string; author: string; description: string; rating: number} };
 }
 
-export interface IRecipeBasic {
+export interface Recipe {
+    id: string | number;
+    name: string;
+    description: string;
+    steps: Array<RecipeStep>;
+    directions: Array<RecipeDirection>;
+    media: string;
+    ingridients: Array<RecipeIngridient>;
+    background: {history: string; region: string; cusine: string};
+    nutrition: {calories: number, carbs: number};
+    rating: number;
+    popularity: number;
+    // Doing for later ** reviews: { [key: number]: {id: string; author: string; description: string; rating: number} };
+}
+
+export interface RecipeBasic {
     id: string | number;
     name: string;
     description: string;

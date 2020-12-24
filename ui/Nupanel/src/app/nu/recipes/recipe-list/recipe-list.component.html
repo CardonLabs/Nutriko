@@ -1,0 +1,49 @@
+<section class="section px-0 py-0 is-fluid mat-typography">
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
+
+    <table mat-table [dataSource]="recipeTableDataSource" multiTemplateDataRows class="mat-elevation-z8">
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let recipe"> {{recipe.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef> Rating </th>
+            <td mat-cell *matCellDef="let recipe"> {{recipe.rating}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="popularity">
+            <th mat-header-cell *matHeaderCellDef> Popularity </th>
+            <td mat-cell *matCellDef="let recipe"> {{recipe.popularity}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="calories">
+            <th mat-header-cell *matHeaderCellDef> Calories </th>
+            <td mat-cell *matCellDef="let recipe"> {{recipe.nutrition.calories}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="carbs">
+            <th mat-header-cell *matHeaderCellDef> Carbs </th>
+            <td mat-cell *matCellDef="let recipe"> {{recipe.nutrition.carbs}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let recipe; columns: displayedColumns" class="recipe-row"
+            [class.recipe-expanded-details]="expandedRecipe === recipe"
+            (click)="recipeSelect(recipe)">
+        </tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+
+    </table>
+
+    <mat-paginator [pageSize]="[10]" showFirstLastButtons></mat-paginator>
+
+</section>

@@ -1,0 +1,33 @@
+.mat-button-base {
+    margin: 8px 8px 8px 0;
+}
+
+table {
+    width: 100%;
+}
+
+table td, table th {
+    vertical-align: middle;
+}
+
+tr.recipe-details-row {
+    height: 0;
+}
+
+tr.recipe-row:not(.recipe-expanded-details):hover {
+    background: whitesmoke;
+}
+
+tr.recipe-row:not(.recipe-expanded-details):active {
+    background: #efefef;
+}
+
+.recipe-row td {
+    border-bottom-width: 0;
+}
+
+.recipe-details {
+    overflow: hidden;
+    display: flex;
+}
+

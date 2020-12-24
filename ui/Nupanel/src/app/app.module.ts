@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +23,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MockerComponent } from './mock/mocker/mocker.component';
 import { HttpClientModule } from '@angular/common/http';
+import { RecipeDetailsComponent } from './nu/recipes/recipe-details/recipe-details.component';
+import { RecipeListComponent } from './nu/recipes/recipe-list/recipe-list.component';
 
 
 @NgModule({
@@ -31,7 +34,9 @@ import { HttpClientModule } from '@angular/common/http';
     NuSidenavComponent,
     PlansComponent,
     RecipesComponent,
-    MockerComponent
+    MockerComponent,
+    RecipeDetailsComponent,
+    RecipeListComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +52,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -18,7 +18,7 @@
             </div>
 
             <div class="column">
-                <app-recipe-details [recipeItem]="currentRecipe"></app-recipe-details>
+                <app-recipe-details *ngIf="currentRecipe" [recipeItem]="currentRecipe"></app-recipe-details>
             </div>
         </div>
     </div>

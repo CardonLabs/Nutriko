@@ -20,6 +20,7 @@ import { PlansComponent } from './nu/plans/plans.component';
 import { RecipesComponent } from './nu/recipes/recipes.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { MockerComponent } from './mock/mocker/mocker.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -53,7 +54,8 @@ import { RecipeListComponent } from './nu/recipes/recipe-list/recipe-list.compon
     MatFormFieldModule,
     MatInputModule,
     HttpClientModule,
-    MatTabsModule
+    MatTabsModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

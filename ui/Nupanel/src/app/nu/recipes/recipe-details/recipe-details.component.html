@@ -1,17 +1,64 @@
-<section class="section px-0 py-0 is-fluid mat-typography">
+<section class="section px-0 py-0 is-fluid mat-typography is-flex-wrap-wrap">
     <h1>{{recipeItem.name}}</h1>
 
-    <mat-tab-group mat-stretch-tabs>
+    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
         <mat-tab label="Details">
             <section class="section ">
+                <h2>Description</h2>
+                <p>{{recipeItem.description}}</p>
+
+                <h2>Background</h2>
+                <div class="columns">
+                    <div class="column">
+                        <h3>Cusine</h3><p>{{recipeItem.background.cusine}}</p>
+                    </div>
+                    <div class="column">
+                        <h3>History</h3><p>{{recipeItem.background.history}}</p>
+                    </div>
+                    <div class="column">
+                        <h3>Region</h3><p>{{recipeItem.background.region}}</p>
+                    </div>
+                </div>    
+                                
+
+                <h2>Social</h2>
+                <div class="columns">
+                    <div class="column">
+                        <h3>Rating</h3><p>{{recipeItem.rating}}</p>
+                    </div>
+                    <div class="column">
+                        <h3>Popularity</h3><p>{{recipeItem.popularity}}</p>
+                    </div>
+                    <div class="column">
+
+                    </div>
+                </div>
             </section>
         </mat-tab>
 
         <mat-tab label="Directions">
+            <section class="section ">
+                <h2>Cooking directions</h2>
+                <mat-list>
+                    <mat-list-item *ngFor="let direction of recipeItem.directions">
+                      <h3 matLine> {{direction.name}} </h3>
+                      <p matLine> {{direction.details}} </p>
+                    </mat-list-item>
+                </mat-list>
+            </section>
 
         </mat-tab>
 
         <mat-tab label="Steps">
+            <section class="section ">
+                <h2>Prep steps</h2>
+                <mat-list>
+                    <mat-list-item *ngFor="let step of recipeItem.steps">
+                      <h3 matLine> {{step.name}} </h3>
+                      <p matLine> {{step.details}} </p>
+                    </mat-list-item>
+                </mat-list>
+            </section>
 
         </mat-tab>
     </mat-tab-group>

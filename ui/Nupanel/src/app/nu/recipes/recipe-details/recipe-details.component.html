@@ -1,36 +1,42 @@
 <section class="section px-0 py-0 is-fluid mat-typography is-flex-wrap-wrap">
-    <h1>{{recipeItem.name}}</h1>
+    <h1 class="mat-headline">{{recipeItem.name}}</h1>
 
     <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
         <mat-tab label="Details">
             <section class="section ">
-                <h2>Description</h2>
-                <p>{{recipeItem.description}}</p>
+                <h2 class="mat-title">Description</h2>
+                <p class="mat-body">{{recipeItem.description}}</p>
 
-                <h2>Background</h2>
+                <h2 class="mat-title">Background</h2>
                 <div class="columns">
                     <div class="column">
-                        <h3>Cusine</h3><p>{{recipeItem.background.cusine}}</p>
+                        <h3 class="mat-subheading">Cusine</h3><p class="mat-body">{{recipeItem.background.cusine}}</p>
                     </div>
                     <div class="column">
-                        <h3>History</h3><p>{{recipeItem.background.history}}</p>
+                        <h3 class="mat-subheading-2">History</h3><p class="mat-body">{{recipeItem.background.history}}</p>
                     </div>
                     <div class="column">
-                        <h3>Region</h3><p>{{recipeItem.background.region}}</p>
+                        <h3 class="mat-subheading-1">Region</h3><p class="mat-body">{{recipeItem.background.region}}</p>
                     </div>
-                </div>    
-                                
+                </div>               
 
-                <h2>Social</h2>
+                <h2 class="mat-title">Social</h2>
                 <div class="columns">
                     <div class="column">
-                        <h3>Rating</h3><p>{{recipeItem.rating}}</p>
+                        <h3 class="mat-subheading-2">Rating</h3><p class="mat-body">{{recipeItem.rating}}</p>
                     </div>
                     <div class="column">
-                        <h3>Popularity</h3><p>{{recipeItem.popularity}}</p>
+                        <h3 class="mat-subheading-1">Popularity</h3><p class="mat-body">{{recipeItem.popularity}}</p>
                     </div>
-                    <div class="column">
+                </div>
 
+                <h2 class="mat-title">Nutrition</h2>
+                <div class="columns">
+                    <div class="column">
+                        <h3 class="mat-subheading-2">Calories</h3><p class="mat-body">{{recipeItem.nutrition.calories}}</p>
+                    </div>
+                    <div class="column">
+                        <h3 class="mat-subheading-1">Carbs</h3><p class="mat-body">{{recipeItem.nutrition.carbs}}</p>
                     </div>
                 </div>
             </section>
@@ -38,7 +44,7 @@
 
         <mat-tab label="Directions">
             <section class="section ">
-                <h2>Cooking directions</h2>
+                <h2 >Cooking directions</h2>
                 <mat-list>
                     <mat-list-item *ngFor="let direction of recipeItem.directions">
                       <h3 matLine> {{direction.name}} </h3>
@@ -46,7 +52,6 @@
                     </mat-list-item>
                 </mat-list>
             </section>
-
         </mat-tab>
 
         <mat-tab label="Steps">
@@ -59,7 +64,6 @@
                     </mat-list-item>
                 </mat-list>
             </section>
-
         </mat-tab>
     </mat-tab-group>
 </section>

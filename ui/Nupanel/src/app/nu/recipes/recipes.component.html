@@ -18,7 +18,10 @@
             </div>
 
             <div class="column">
-                <app-recipe-details *ngIf="currentRecipe" [recipeItem]="currentRecipe"></app-recipe-details>
+                <app-recipe-details *ngIf="currentRecipe, currentRecipeIngredients" 
+                    [recipeItem]="currentRecipe" 
+                    [recipeItemIngredients]="currentRecipeIngredients">
+                </app-recipe-details>
             </div>
         </div>
     </div>

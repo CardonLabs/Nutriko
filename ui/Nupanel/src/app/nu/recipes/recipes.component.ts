@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 
 import { RecipeService } from 'src/app/nu/recipes/recipe.service';
 import { MockingService } from 'src/app/mock/mocking.service';
-import { Recipe, RecipeBasic } from 'src/app/models/recipes';
+import { Recipe, RecipeBasic, RecipeIngridient } from 'src/app/models/recipes';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -18,6 +18,7 @@ export class RecipesComponent implements OnInit {
   recipeData: Array<Recipe>;
   mockService$: Observable<RecipeBasic[]>;
   currentRecipe: Recipe;
+  currentRecipeIngredients: Array<RecipeIngridient>;
 
   constructor(private MockingService: MockingService, private RecipeSvc: RecipeService) { }
 
@@ -25,7 +26,7 @@ export class RecipesComponent implements OnInit {
     this.MockingService.getRecipes().subscribe( response => {
       this.recipeData = response;
       this.currentRecipe = this.recipeData[0];
-      this.RecipeSvc.selectRecipe(this.recipeData[0]);
+      this.currentRecipeIngredients = this.recipeData[0].ingridients;
     });
     
   }

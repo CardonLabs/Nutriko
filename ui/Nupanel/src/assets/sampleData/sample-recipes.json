@@ -39,20 +39,6 @@
              "quantity":30,
              "weight":20,
              "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"extra virgin olive oil",
-             "quantity":1,
-             "weight":15,
-             "unit":"ml"
-          },
-          {
-             "id":"",
-             "name":"lemon",
-             "quantity":1,
-             "weight":20,
-             "unit":"g"
           }
        ],
        "nutrition":{
@@ -137,13 +123,6 @@
           "cusine":""
        },
        "ingridients":[
-          {
-             "id":"",
-             "name":"chicken",
-             "quantity":1,
-             "weight":4,
-             "unit":"Lb"
-          },
           {
              "id":"",
              "name":"rosemary",
@@ -264,34 +243,6 @@
        "ingridients":[
           {
              "id":"",
-             "name":"chicken",
-             "quantity":1,
-             "weight":4,
-             "unit":"Lb"
-          },
-          {
-             "id":"",
-             "name":"rosemary",
-             "quantity":120,
-             "weight":10,
-             "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"salt and pepper",
-             "quantity":20,
-             "weight":10,
-             "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"garlic",
-             "quantity":30,
-             "weight":20,
-             "unit":"g"
-          },
-          {
-             "id":"",
              "name":"extra virgin olive oil",
              "quantity":1,
              "weight":15,
@@ -389,41 +340,6 @@
        "ingridients":[
           {
              "id":"",
-             "name":"chicken",
-             "quantity":1,
-             "weight":4,
-             "unit":"Lb"
-          },
-          {
-             "id":"",
-             "name":"rosemary",
-             "quantity":120,
-             "weight":10,
-             "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"salt and pepper",
-             "quantity":20,
-             "weight":10,
-             "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"garlic",
-             "quantity":30,
-             "weight":20,
-             "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"extra virgin olive oil",
-             "quantity":1,
-             "weight":15,
-             "unit":"ml"
-          },
-          {
-             "id":"",
              "name":"lemon",
              "quantity":1,
              "weight":20,
@@ -518,20 +434,6 @@
              "quantity":1,
              "weight":4,
              "unit":"Lb"
-          },
-          {
-             "id":"",
-             "name":"rosemary",
-             "quantity":120,
-             "weight":10,
-             "unit":"g"
-          },
-          {
-             "id":"",
-             "name":"salt and pepper",
-             "quantity":20,
-             "weight":10,
-             "unit":"g"
           },
           {
              "id":"",

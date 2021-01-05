@@ -75,5 +75,19 @@
                 </mat-accordion>
             </section>
         </mat-tab>
+
+        <mat-tab label="Ingredients">
+            <section class="section ">
+                <h2 class="mat-title">List of ingredients and portions</h2>
+                <app-recipe-ingredients *ngIf="recipeItemIngredients" [ingredients]="recipeItemIngredients"></app-recipe-ingredients>
+            </section>
+        </mat-tab>
+
+        <mat-tab label="Nutrition">
+            <section class="section ">
+                <h2 class="mat-title">Nutritional info</h2>
+            </section>
+        </mat-tab>
+
     </mat-tab-group>
 </section>

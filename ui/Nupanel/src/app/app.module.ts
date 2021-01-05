@@ -26,6 +26,7 @@ import { MockerComponent } from './mock/mocker/mocker.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RecipeDetailsComponent } from './nu/recipes/recipe-details/recipe-details.component';
 import { RecipeListComponent } from './nu/recipes/recipe-list/recipe-list.component';
+import { RecipeIngredientsComponent } from './nu/recipes/recipe-ingredients/recipe-ingredients.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { RecipeListComponent } from './nu/recipes/recipe-list/recipe-list.compon
     RecipesComponent,
     MockerComponent,
     RecipeDetailsComponent,
-    RecipeListComponent
+    RecipeListComponent,
+    RecipeIngredientsComponent
   ],
   imports: [
     BrowserModule,

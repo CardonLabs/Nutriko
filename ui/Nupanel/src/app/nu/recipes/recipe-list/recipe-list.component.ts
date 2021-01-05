@@ -3,7 +3,7 @@ import { MatTableDataSource}  from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { RecipeService } from 'src/app/nu/recipes/recipe.service';
 
-import { Recipe } from 'src/app/models/recipes';
+import { Recipe, RecipeIngridient } from 'src/app/models/recipes';
 
 @Component({
   selector: 'app-recipe-list',
@@ -22,11 +22,10 @@ export class RecipeListComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit() {
     this.recipeTableDataSource.data = this.recipeList;
-    console.log(this.recipeTableDataSource.paginator);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.recipeTableDataSource.data = this.recipeList;
+    //this.recipeTableDataSource.data = this.recipeList;
   }
 
   ngAfterViewInit() {

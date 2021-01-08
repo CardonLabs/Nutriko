@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Recipe, RecipeIngridient } from 'src/app/models/recipes';
+import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
+import { Recipe, RecipeIngridient, RecipeDirection, RecipeStep } from 'src/app/models/recipes';
 import { Subscription } from 'rxjs';
 import { RecipeService } from 'src/app/nu/recipes/recipe.service';
 
@@ -8,21 +8,32 @@ import { RecipeService } from 'src/app/nu/recipes/recipe.service';
   templateUrl: './recipe-details.component.html',
   styleUrls: ['./recipe-details.component.scss']
 })
-export class RecipeDetailsComponent implements OnInit, OnDestroy {
+export class RecipeDetailsComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() recipeItem: Recipe;
-  @Input() recipeItemIngredients: Array<RecipeIngridient>;
+
+  recipeDirections: Array<RecipeDirection>;
+  recipeIngredients: Array<RecipeIngridient>;
+  recipeSteps: Array<RecipeStep>;
   
   subscription: Subscription;
 
   constructor(private RecipeSvc: RecipeService) { 
     this.subscription = RecipeSvc.recipeSelectedSource$.subscribe( recipe => {
       this.recipeItem = recipe;
-      this.recipeItemIngredients = recipe.ingridients;
+      this.recipeDirections = recipe.directions;
+      this.recipeIngredients = recipe.ingridients;
+      this.recipeSteps = recipe.steps;
     })
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges() {
+    this.recipeDirections = this.recipeItem.directions;
+    this.recipeIngredients = this.recipeItem.ingridients;
+    this.recipeSteps = this.recipeItem.steps;
   }
 
   ngOnDestroy() {

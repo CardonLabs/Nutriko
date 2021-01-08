@@ -27,6 +27,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { RecipeDetailsComponent } from './nu/recipes/recipe-details/recipe-details.component';
 import { RecipeListComponent } from './nu/recipes/recipe-list/recipe-list.component';
 import { RecipeIngredientsComponent } from './nu/recipes/recipe-ingredients/recipe-ingredients.component';
+import { RecipeStepsComponent } from './nu/recipes/recipe-steps/recipe-steps.component';
+import { RecipeDirectionsComponent } from './nu/recipes/recipe-directions/recipe-directions.component';
+import { RecipeNutritionComponent } from './nu/recipes/recipe-nutrition/recipe-nutrition.component';
 
 
 @NgModule({
@@ -39,7 +42,10 @@ import { RecipeIngredientsComponent } from './nu/recipes/recipe-ingredients/reci
     MockerComponent,
     RecipeDetailsComponent,
     RecipeListComponent,
-    RecipeIngredientsComponent
+    RecipeIngredientsComponent,
+    RecipeStepsComponent,
+    RecipeDirectionsComponent,
+    RecipeNutritionComponent
   ],
   imports: [
     BrowserModule,

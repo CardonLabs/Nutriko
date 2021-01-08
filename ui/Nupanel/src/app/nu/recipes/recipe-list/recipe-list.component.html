@@ -11,16 +11,6 @@
             <td mat-cell *matCellDef="let recipe"> {{recipe.name}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="rating">
-            <th mat-header-cell *matHeaderCellDef> Rating </th>
-            <td mat-cell *matCellDef="let recipe"> {{recipe.rating}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="popularity">
-            <th mat-header-cell *matHeaderCellDef> Popularity </th>
-            <td mat-cell *matCellDef="let recipe"> {{recipe.popularity}} </td>
-        </ng-container>
-
         <ng-container matColumnDef="calories">
             <th mat-header-cell *matHeaderCellDef> Calories </th>
             <td mat-cell *matCellDef="let recipe"> {{recipe.nutrition.calories}} </td>
@@ -28,6 +18,11 @@
 
         <ng-container matColumnDef="carbs">
             <th mat-header-cell *matHeaderCellDef> Carbs </th>
+            <td mat-cell *matCellDef="let recipe"> {{recipe.nutrition.carbs}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Sugars">
+            <th mat-header-cell *matHeaderCellDef> Sugars </th>
             <td mat-cell *matCellDef="let recipe"> {{recipe.nutrition.carbs}} </td>
         </ng-container>
 

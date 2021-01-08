@@ -15,7 +15,7 @@ export class RecipeListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() recipeList: Array<Recipe>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['name', 'rating', 'popularity', 'calories', 'carbs'];
+  displayedColumns: string[] = ['name', 'calories', 'carbs', 'Sugars'];
   recipeTableDataSource = new MatTableDataSource<Recipe>();
 
   constructor(private RecipeSvc: RecipeService) { }

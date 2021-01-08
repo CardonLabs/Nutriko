@@ -1,0 +1,14 @@
+<section class="section px-0 py-0 is-fluid mat-typography">
+
+    <mat-accordion>
+        <mat-expansion-panel  *ngFor="let step of steps">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{step.name}} - step
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>{{step.details}}</p>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+</section>

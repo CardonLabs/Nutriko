@@ -13,12 +13,16 @@
 <section class="section">
     <div class="container is-fluid">
         <div class="columns">
-            <div class="column is-two-fifths">
-                <app-recipe-list *ngIf="recipeData" [recipeList]="recipeData"></app-recipe-list>
+            <div class="column is-one-third">
+                <app-recipe-list 
+                    *ngIf="recipeData" 
+                    [recipeList]="recipeData">
+                </app-recipe-list>
             </div>
 
             <div class="column">
-                <app-recipe-details *ngIf="currentRecipe, currentRecipeIngredients" 
+                <app-recipe-details 
+                    *ngIf="currentRecipe, currentRecipeIngredients" 
                     [recipeItem]="currentRecipe" 
                     [recipeItemIngredients]="currentRecipeIngredients">
                 </app-recipe-details>

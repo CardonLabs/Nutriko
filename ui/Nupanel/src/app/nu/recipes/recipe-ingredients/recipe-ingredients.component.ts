@@ -21,8 +21,6 @@ export class RecipeIngredientsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.ingredients);
-
   }
 
 }

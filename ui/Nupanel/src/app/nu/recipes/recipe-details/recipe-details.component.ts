@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { Recipe, RecipeIngridient, RecipeDirection, RecipeStep } from 'src/app/models/recipes';
+import { FoodItem } from 'src/app/models/foods';
 import { Subscription } from 'rxjs';
 import { RecipeService } from 'src/app/nu/recipes/recipe.service';
 
@@ -13,7 +14,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() recipeItem: Recipe;
 
   recipeDirections: Array<RecipeDirection>;
-  recipeIngredients: Array<RecipeIngridient>;
+  recipeFoods: Array<FoodItem>;
   recipeSteps: Array<RecipeStep>;
   
   subscription: Subscription;
@@ -22,7 +23,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy, OnChanges {
     this.subscription = RecipeSvc.recipeSelectedSource$.subscribe( recipe => {
       this.recipeItem = recipe;
       this.recipeDirections = recipe.directions;
-      this.recipeIngredients = recipe.ingridients;
+      this.recipeFoods = recipe.foods;
       this.recipeSteps = recipe.steps;
     })
   }
@@ -32,7 +33,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.recipeDirections = this.recipeItem.directions;
-    this.recipeIngredients = this.recipeItem.ingridients;
+    this.recipeFoods = this.recipeItem.foods;
     this.recipeSteps = this.recipeItem.steps;
   }
 

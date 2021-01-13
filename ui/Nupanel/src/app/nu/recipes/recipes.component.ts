@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { RecipeService } from 'src/app/nu/recipes/recipe.service';
 import { MockingService } from 'src/app/mock/mocking.service';

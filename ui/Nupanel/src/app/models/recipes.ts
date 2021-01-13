@@ -5,6 +5,8 @@
  * Get recipes by plan
  */
 
+ import { FoodItem, FoodNutrient } from 'src/app/models/foods';
+
  //recipe full
 export interface IMRecipe {
     id: string | number;
@@ -29,6 +31,7 @@ export interface Recipe {
     directions: Array<RecipeDirection>;
     media: string;
     ingridients: Array<RecipeIngridient>;
+    foods: Array<FoodItem> | null;
     background: {history: string; region: string; cusine: string};
     nutrition: {calories: number, carbs: number};
     rating: number;

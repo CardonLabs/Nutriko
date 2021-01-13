@@ -26,7 +26,7 @@ import { MockerComponent } from './mock/mocker/mocker.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RecipeDetailsComponent } from './nu/recipes/recipe-details/recipe-details.component';
 import { RecipeListComponent } from './nu/recipes/recipe-list/recipe-list.component';
-import { RecipeIngredientsComponent } from './nu/recipes/recipe-ingredients/recipe-ingredients.component';
+import { RecipeFoodsComponent } from './nu/recipes/recipe-foods/recipe-foods.component';
 import { RecipeStepsComponent } from './nu/recipes/recipe-steps/recipe-steps.component';
 import { RecipeDirectionsComponent } from './nu/recipes/recipe-directions/recipe-directions.component';
 import { RecipeNutritionComponent } from './nu/recipes/recipe-nutrition/recipe-nutrition.component';
@@ -42,7 +42,7 @@ import { RecipeNutritionComponent } from './nu/recipes/recipe-nutrition/recipe-n
     MockerComponent,
     RecipeDetailsComponent,
     RecipeListComponent,
-    RecipeIngredientsComponent,
+    RecipeFoodsComponent,
     RecipeStepsComponent,
     RecipeDirectionsComponent,
     RecipeNutritionComponent

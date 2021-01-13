@@ -41,6 +41,110 @@
              "unit":"g"
           }
        ],
+       "foods": [
+         {
+            "id": 171705,
+            "description": "Avocados, raw, all commercial varieties",
+            "dataType": "SR Legacy",
+            "foodCategory": "Fruits and Fruit Juices",
+            "foodNutrients": [
+                {
+                    "id": 1632814,
+                    "name": "Energy",
+                    "unitName": "kcal",
+                    "amount": 160,
+                    "number": 208
+                },
+                {
+                    "id": 1632735,
+                    "name": "Protein",
+                    "unitName": "g",
+                    "amount": 2,
+                    "number": 203
+                },
+                {
+                    "id": 1632765,
+                    "name": "Total lipid (fat)",
+                    "unitName": "g",
+                    "amount": 14.66,
+                    "number": 204
+                },
+                {
+                    "id": 1632813,
+                    "name": "Carbohydrate",
+                    "unitName": "g",
+                    "amount": 8.53,
+                    "number": 205
+                },
+                {
+                    "id": 1632779,
+                    "name": "Sugars",
+                    "unitName": "g",
+                    "amount": 0.66,
+                    "number": 205
+                }
+            ],
+            "nutrientConversionFactors": [
+                {
+                    "protein": 3.36,
+                    "fat": 8.70,
+                    "carbs": 3.60,
+                    "nitrogen": 6.25
+                }
+            ]
+         },
+         {
+            "id": 171705,
+            "description": "Avocados, raw, all commercial varieties",
+            "dataType": "SR Legacy",
+            "foodCategory": "Fruits and Fruit Juices",
+            "foodNutrients": [
+                {
+                    "id": 1632814,
+                    "name": "Energy",
+                    "unitName": "kcal",
+                    "amount": 160,
+                    "number": 208
+                },
+                {
+                    "id": 1632735,
+                    "name": "Protein",
+                    "unitName": "g",
+                    "amount": 2,
+                    "number": 203
+                },
+                {
+                    "id": 1632765,
+                    "name": "Total lipid (fat)",
+                    "unitName": "g",
+                    "amount": 14.66,
+                    "number": 204
+                },
+                {
+                    "id": 1632813,
+                    "name": "Carbohydrate",
+                    "unitName": "g",
+                    "amount": 8.53,
+                    "number": 205
+                },
+                {
+                    "id": 1632779,
+                    "name": "Sugars",
+                    "unitName": "g",
+                    "amount": 0.66,
+                    "number": 205
+                }
+            ],
+            "nutrientConversionFactors": [
+                {
+                    "protein": 3.36,
+                    "fat": 8.70,
+                    "carbs": 3.60,
+                    "nitrogen": 6.25
+                }
+            ]
+         }
+       ],
        "nutrition":{
           "calories":840,
           "carbs":45

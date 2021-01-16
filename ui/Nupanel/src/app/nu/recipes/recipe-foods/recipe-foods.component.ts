@@ -18,6 +18,7 @@ export class RecipeFoodsComponent implements OnChanges {
 
   ngOnChanges() {
     this.aggregateNutrients(this.foods)
+    console.log(this.foods);
   }
 
   aggregateNutrients(foods: Array<FoodItem>) {

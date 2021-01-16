@@ -4,6 +4,7 @@
         "description": "Avocados, raw, all commercial varieties",
         "dataType": "SR Legacy",
         "foodCategory": "Fruits and Fruit Juices",
+        "amount": 250,
         "foodNutrients": [
             {
                 "id": 1632814,
@@ -55,6 +56,7 @@
         "description": "Avocados, raw, all commercial varieties",
         "dataType": "SR Legacy",
         "foodCategory": "Fruits and Fruit Juices",
+        "amount": 250,
         "foodNutrients": [
             {
                 "id": 1632814,

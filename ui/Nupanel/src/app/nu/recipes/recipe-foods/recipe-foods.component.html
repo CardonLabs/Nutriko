@@ -19,7 +19,26 @@
                         {{food.description}}
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <p>{{food.foodCategory}}</p>
+                <div class="columns">
+                    <div class="column">
+                        <b>Amount: (g)</b>
+                        <p>{{food.amount}}</p>
+                    </div>
+                    <div class="column">
+                        <table style="width: 100%;">
+                            <tr>
+                                <th>Nutrient</th>
+                                <th>Amount</th>
+                                <th>Unit</th>
+                            </tr>
+                            <tr *ngFor="let nutrient of food.foodNutrients">
+                                <td>{{nutrient.name}}</td>
+                                <td>{{nutrient.amount}}</td>
+                                <td>{{nutrient.unitName}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </mat-expansion-panel>
         </mat-accordion>
     </div>

@@ -9,6 +9,7 @@ export interface FoodItem {
     description: string,
     dataType: string,
     foodCategory: string,
+    amount: number,
     foodNutrients: Array<FoodNutrient>,
     nutrientConversionFactors: { [key: string]: { value: number } }
 }

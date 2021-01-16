@@ -1,14 +1,27 @@
 <section class="section px-0 py-0 is-fluid mat-typography">
 
-    <mat-accordion>
-        <mat-expansion-panel  *ngFor="let food of foods">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    {{food.description}} - step
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>{{food.foodCategory}}</p>
-        </mat-expansion-panel>
-    </mat-accordion>
+    <div class="container">
+        <div class="columns mb-4">
+            <div class="column" *ngFor="let aggregate of nutritionAggregate | keyvalue">
+                <mat-card>
+                    <h2>{{aggregate.key | titlecase}}</h2>
+                    <h1>{{aggregate.value}}</h1>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <mat-accordion>
+            <mat-expansion-panel  *ngFor="let food of foods">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{food.description}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>{{food.foodCategory}}</p>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
 
 </section>

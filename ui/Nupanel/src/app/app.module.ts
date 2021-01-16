@@ -10,6 +10,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -63,7 +64,8 @@ import { RecipeNutritionComponent } from './nu/recipes/recipe-nutrition/recipe-n
     MatInputModule,
     HttpClientModule,
     MatTabsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

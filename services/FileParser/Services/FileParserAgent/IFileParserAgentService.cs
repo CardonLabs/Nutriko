@@ -6,6 +6,6 @@ using FileParser.Models.FdcShemas.SrLegacy;
 namespace FileParser.Services.FileParserAgentService
 {
     public interface IFileParserAgentService {
-        
+        Task ReadBlob ();
     }
 }

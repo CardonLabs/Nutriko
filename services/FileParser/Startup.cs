@@ -11,6 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+using FileParser.Models.FileParserAgentService;
+using FileParser.Services.FileParserAgentService;
 
 namespace FileParser
 {
@@ -26,6 +31,11 @@ namespace FileParser
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<BlobStorageConfig>(
+                Configuration.GetSection("CloudServices:BlobStorage")
+            );
+
+            services.AddScoped<IFileParserAgentService, FileParserAgentService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

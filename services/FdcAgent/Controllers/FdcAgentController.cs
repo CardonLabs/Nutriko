@@ -9,6 +9,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
 using FdcAgent.Services.BlobParserService;
+using FdcAgent.Services.FoodStreamService;
 
 namespace FdcAgent.Controllers
 {
@@ -16,13 +17,16 @@ namespace FdcAgent.Controllers
     [Route("[controller]")]
     public class FdcAgentController : ControllerBase
     {
-        private readonly ILogger<FdcAgentController> _logger;
+        private readonly ILogger<FdcAgentFoodConsumer> _logger;
         private IFdcAgentBlobParser _blobParser;
+        private IFdcAgentFoodConsumer _msgConsumer;
+        private FdcAgentFoodConsumer _consumer;
 
-        public FdcAgentController(ILogger<FdcAgentController> logger, IFdcAgentBlobParser blobParser)
+        public FdcAgentController(ILogger<FdcAgentFoodConsumer> logger, IFdcAgentBlobParser blobParser, FdcAgentFoodConsumer consumer)
         {
             _logger = logger;
             _blobParser = blobParser;
+            _consumer = consumer;
         }
 
         [HttpGet]
@@ -37,6 +41,15 @@ namespace FdcAgent.Controllers
         {
             var test = _blobParser.ReadBlob();
             return test;
+        }
+
+        [HttpGet("getmsg")]
+        public string GetMsg()
+        {
+            var test = _blobParser.ReadBlob();
+            _consumer.test();
+            _consumer.Dispose();
+            return "messages";
         }
 
     }

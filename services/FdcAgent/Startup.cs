@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 using FdcAgent.Services.BlobParserService;
+using FdcAgent.Services.FoodStreamService;
 
 namespace FdcAgent
 {
@@ -31,8 +32,11 @@ namespace FdcAgent
             services.Configure<FdcAgentBlobConfig>(
                 Configuration.GetSection("BlobStorage")
             );
+            
+            services.AddFdcAgentFoodStreamService();
 
             services.AddFdcAgentBlobParserService(Configuration);
+            services.AddFdcAgentFoodConsumerService();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

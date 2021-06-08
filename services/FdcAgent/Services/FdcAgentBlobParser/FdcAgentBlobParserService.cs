@@ -19,6 +19,8 @@ using Azure.Storage.Blobs.Models;
 using CsvHelper;
 using CsvHelper.Configuration;
 
+using FdcAgent.Services.FoodStreamService;
+
 using FdcAgent.Models.FdcShemas;
 
 namespace FdcAgent.Services.BlobParserService
@@ -35,22 +37,25 @@ namespace FdcAgent.Services.BlobParserService
     {
         private readonly ILogger<FdcAgentBlobParser> _log;
         private readonly FdcAgentBlobConfig _storageConfig;
-
         private BlobServiceClient _serviceClient;
         private BlobContainerClient _container;
         private BlobClient _client;
+        private IFdcAgentFoodStream _legacyMessagePublisher;
 
-        public FdcAgentBlobParser(ILogger<FdcAgentBlobParser> logger, IOptions<FdcAgentBlobConfig> blobConfig)
+        public FdcAgentBlobParser(ILogger<FdcAgentBlobParser> logger, IOptions<FdcAgentBlobConfig> blobConfig, IFdcAgentFoodStream legacyMessagePublisher)
         {
             _log = logger;
             _storageConfig = blobConfig.Value;
             _serviceClient = new BlobServiceClient(_storageConfig.connectionString);
             _container = _serviceClient.GetBlobContainerClient(_storageConfig.container);
+            _legacyMessagePublisher = legacyMessagePublisher;
         }
 
         public async Task<string> ReadBlob()
         {
             _client = _container.GetBlobClient(_storageConfig.blob);
+
+            FdcLegacyMessage message = new FdcLegacyMessage();
 
             var content = await _client.DownloadAsync();
 
@@ -63,7 +68,8 @@ namespace FdcAgent.Services.BlobParserService
 
                     foreach (var item in rec)
                     {
-                        _log.LogInformation(item.FdcId.ToString());
+                        message.FdcId = item.FdcId;
+                        _legacyMessagePublisher.Publish(message);
                     }
                     
                 }

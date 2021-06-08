@@ -7,12 +7,6 @@ using CsvHelper.Configuration.Attributes;
 
 namespace FdcAgent.Models.FdcShemas
 {
-    public class SrLegacyFoodItem
-    {
-        public int fdcId { get; set; }
-        public string fdc_id { get; set; }
-    }
-
     public class CvsSrLegacyFoodItem
     {
         [Index(0)]

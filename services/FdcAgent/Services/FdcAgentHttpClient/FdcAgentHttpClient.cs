@@ -9,26 +9,31 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
 using FdcAgent.Models.FdcShemas;
-using FdcAgent.Models.FdcSyncAgent.FdcSyncOptions;
+using FdcAgent.Models.FdcShemas.FdcSyncOptions;
 
 namespace FdcAgent.Services.FoodStreamService
 {
     public static class FdcAgentHttpClientExtension
     {
-        public static void AddFdcAgentHttpClientService(this IServiceCollection services)
+        public static void AddFdcAgentHttpClientService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IFdcAgentHttpClient, FdcAgentHttpClient>();
+            services.Configure<DataSources>(
+                configuration.GetSection("DataSources")
+            );
+
+            services.AddHttpClient<IFdcAgentHttpClient, FdcAgentHttpClient>();
         }
     }
     public class FdcAgentHttpClient : IFdcAgentHttpClient
     {
         private readonly DataSources _dataSources;
         private readonly ILogger<FdcAgentHttpClient> _log;
-        public HttpClient Client { get; }
+        public HttpClient _client { get; }
 
         public FdcAgentHttpClient(HttpClient client, IOptions<DataSources> dataSources, ILogger<FdcAgentHttpClient> log)
         {
@@ -36,7 +41,7 @@ namespace FdcAgent.Services.FoodStreamService
             _log = log;
 
             client.BaseAddress = new Uri(_dataSources.Usda.FoodDataCentral.BaseUrl);
-            Client = client;
+            _client = client;
         }
 
         public async Task<IList<SRLegacyFoodItem>> GetFoods(int[] fdcIds)
@@ -58,7 +63,7 @@ namespace FdcAgent.Services.FoodStreamService
                 "application/json"
             );
             
-            var response = await Client.PostAsync(
+            var response = await _client.PostAsync(
                 _dataSources.Usda.FoodDataCentral.Endpoints.Foods + _dataSources.Usda.FoodDataCentral.Key,
                 fdcJsonContent
             );

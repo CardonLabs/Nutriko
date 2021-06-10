@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FdcAgent.Models.FdcSyncAgent.FdcSyncOptions
+namespace FdcAgent.Models.FdcShemas.FdcSyncOptions
 {
     public class DataSources {
         public Usda Usda { get; set; }

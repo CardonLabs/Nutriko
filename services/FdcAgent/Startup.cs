@@ -29,14 +29,10 @@ namespace FdcAgent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<FdcAgentBlobConfig>(
-                Configuration.GetSection("BlobStorage")
-            );
-            
             services.AddFdcAgentFoodStreamService();
-
             services.AddFdcAgentBlobParserService(Configuration);
             services.AddFdcAgentFoodConsumerService();
+            services.AddFdcAgentHttpClientService(Configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -48,7 +48,7 @@ namespace FdcAgent.Services.FoodStreamService
 
         public void test()
         {
-            _sub2 = mem.legacyMessageRx().Subscribe( x => {
+            _sub2 = mem.legacyMessageRx().Skip<FdcLegacyMessage>(5).Subscribe( x => {
                 System.Console.WriteLine("subscriber 2: ---- " + x.FdcId);
             });
         }

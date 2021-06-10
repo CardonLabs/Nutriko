@@ -14,5 +14,6 @@ namespace FdcAgent.Services.FoodStreamService
         //void EchoMsg(int msg);
         //Task EchoMsgItem(FdcLegacyMessage message);
         void test();
+        void Dispose();
     }
 }

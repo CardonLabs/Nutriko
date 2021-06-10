@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using System.Text.Json;
 
 using FdcAgent.Services.BlobParserService;
 using FdcAgent.Services.FoodStreamService;
@@ -20,13 +21,14 @@ namespace FdcAgent.Controllers
         private readonly ILogger<FdcAgentFoodConsumer> _logger;
         private IFdcAgentBlobParser _blobParser;
         private IFdcAgentFoodConsumer _msgConsumer;
-        private FdcAgentFoodConsumer _consumer;
+        private IFdcAgentHttpClient _httpClient;
 
-        public FdcAgentController(ILogger<FdcAgentFoodConsumer> logger, IFdcAgentBlobParser blobParser, FdcAgentFoodConsumer consumer)
+        public FdcAgentController(ILogger<FdcAgentFoodConsumer> logger, IFdcAgentBlobParser blobParser, IFdcAgentFoodConsumer msgConsumer, IFdcAgentHttpClient httpClient)
         {
             _logger = logger;
             _blobParser = blobParser;
-            _consumer = consumer;
+            _msgConsumer = msgConsumer;
+            _httpClient = httpClient;
         }
 
         [HttpGet]
@@ -47,9 +49,17 @@ namespace FdcAgent.Controllers
         public string GetMsg()
         {
             var test = _blobParser.ReadBlob();
-            _consumer.test();
-            _consumer.Dispose();
+            _msgConsumer.test();
+            _msgConsumer.Dispose();
             return "messages";
+        }
+
+        [HttpGet("GetFoods")]
+        public async Task<dynamic> GetFoods()
+        {
+            var res = await _httpClient.GetFoods(new int[] {171705, 169760});
+
+            return JsonSerializer.Serialize(res);
         }
 
     }

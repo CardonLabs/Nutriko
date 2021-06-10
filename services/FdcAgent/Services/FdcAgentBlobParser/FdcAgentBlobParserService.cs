@@ -29,6 +29,10 @@ namespace FdcAgent.Services.BlobParserService
     {
         public static void AddFdcAgentBlobParserService(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<FdcAgentBlobConfig>(
+                configuration.GetSection("BlobStorage")
+            );
+
             services.AddScoped<IFdcAgentBlobParser, FdcAgentBlobParser>();
         }
     }

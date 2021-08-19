@@ -20,6 +20,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 
 using FdcAgent.Services.FoodStreamService;
+using FdcAgent.Services.FoodBusService;
 
 using FdcAgent.Models.FdcShemas;
 
@@ -44,22 +45,24 @@ namespace FdcAgent.Services.BlobParserService
         private BlobServiceClient _serviceClient;
         private BlobContainerClient _container;
         private BlobClient _client;
-        private IFdcAgentFoodStream _legacyMessagePublisher;
+        private IFdcAgentBus _messageBus;
+        private FdcAgentParserStatus _operationStatus;
 
-        public FdcAgentBlobParser(ILogger<FdcAgentBlobParser> logger, IOptions<FdcAgentBlobConfig> blobConfig, IFdcAgentFoodStream legacyMessagePublisher)
+        public FdcAgentBlobParser(ILogger<FdcAgentBlobParser> logger, IOptions<FdcAgentBlobConfig> blobConfig, IFdcAgentBus messageBus)
         {
             _log = logger;
             _storageConfig = blobConfig.Value;
             _serviceClient = new BlobServiceClient(_storageConfig.connectionString);
             _container = _serviceClient.GetBlobContainerClient(_storageConfig.container);
-            _legacyMessagePublisher = legacyMessagePublisher;
+            _messageBus = messageBus;
         }
 
-        public async Task<string> ReadBlob()
+        public async Task<FdcAgentParserStatus> ReadBlob()
         {
+            _operationStatus = new FdcAgentParserStatus();
             _client = _container.GetBlobClient(_storageConfig.blob);
 
-            FdcLegacyMessage message = new FdcLegacyMessage();
+            FdcAgentMessage message = new FdcAgentMessage();
 
             var content = await _client.DownloadAsync();
 
@@ -67,20 +70,24 @@ namespace FdcAgent.Services.BlobParserService
             using (var csv = new CsvReader(stream, System.Globalization.CultureInfo.CurrentCulture))
             {
                 while (!stream.EndOfStream) 
-                {
+                { 
                     var rec = csv.GetRecords<CvsSrLegacyFoodItem>();
 
                     foreach (var item in rec)
                     {
                         message.FdcId = item.FdcId;
-                        _legacyMessagePublisher.Publish(message);
+                        _messageBus.PublishMessage(message);
+                        _operationStatus.count++;
                     }
                     
                 }
+                _messageBus.AllItemsProcessed();
 
             }
 
-            return "someome";
+            _operationStatus.message = "Completed publishing items to observable";
+
+            return _operationStatus;
             
         }
     }

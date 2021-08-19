@@ -11,6 +11,8 @@ using System.Text.Json;
 
 using FdcAgent.Services.BlobParserService;
 using FdcAgent.Services.FoodStreamService;
+using FdcAgent.Services.FoodBusService;
+using FdcAgent.Models.FdcShemas;
 
 namespace FdcAgent.Controllers
 {
@@ -18,12 +20,13 @@ namespace FdcAgent.Controllers
     [Route("[controller]")]
     public class FdcAgentController : ControllerBase
     {
-        private readonly ILogger<FdcAgentFoodConsumer> _logger;
+        private readonly ILogger<FdcAgentController> _logger;
         private IFdcAgentBlobParser _blobParser;
-        private IFdcAgentFoodConsumer _msgConsumer;
+        private IFdcAgentBusConsumer _msgConsumer;
         private IFdcAgentHttpClient _httpClient;
 
-        public FdcAgentController(ILogger<FdcAgentFoodConsumer> logger, IFdcAgentBlobParser blobParser, IFdcAgentFoodConsumer msgConsumer, IFdcAgentHttpClient httpClient)
+        public FdcAgentController(ILogger<FdcAgentController> logger, IFdcAgentBlobParser blobParser, IFdcAgentBusConsumer msgConsumer, 
+                IFdcAgentHttpClient httpClient)
         {
             _logger = logger;
             _blobParser = blobParser;
@@ -31,27 +34,15 @@ namespace FdcAgent.Controllers
             _httpClient = httpClient;
         }
 
-        [HttpGet]
-        public string Get()
+        [HttpPost("agent/import")]
+        public async Task<IActionResult> AgentImport()
         {
-            var test = _blobParser.ReadBlob();
-            return "Works";
-        }
-
-        [HttpGet("getinfo")]
-        public Task<string> GetInfo()
-        {
-            var test = _blobParser.ReadBlob();
-            return test;
-        }
-
-        [HttpGet("getmsg")]
-        public string GetMsg()
-        {
-            var test = _blobParser.ReadBlob();
-            _msgConsumer.test();
+            _msgConsumer.ConsoleLogger();
+            var parserReply = await _blobParser.ReadBlob();
             _msgConsumer.Dispose();
-            return "messages";
+            
+
+            return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
 
         [HttpGet("GetFoods")]

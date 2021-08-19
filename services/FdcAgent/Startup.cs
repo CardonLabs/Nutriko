@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 
 using FdcAgent.Services.BlobParserService;
 using FdcAgent.Services.FoodStreamService;
+using FdcAgent.Services.FoodBusService;
 
 namespace FdcAgent
 {
@@ -29,9 +30,9 @@ namespace FdcAgent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFdcAgentFoodStreamService();
+            services.AddFdcAgentBusService();
             services.AddFdcAgentBlobParserService(Configuration);
-            services.AddFdcAgentFoodConsumerService();
+            services.AddFdcAgentBusConsumerService();
             services.AddFdcAgentHttpClientService(Configuration);
 
             services.AddControllers();

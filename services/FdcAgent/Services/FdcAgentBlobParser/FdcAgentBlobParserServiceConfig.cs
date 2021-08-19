@@ -9,4 +9,9 @@ namespace FdcAgent.Services.BlobParserService
         public string container { get; set; }
         public string blob { get; set; }
     }
+
+    public class FdcAgentParserStatus {
+        public int count { get; set; }
+        public string message { get; set; }
+    }
 }

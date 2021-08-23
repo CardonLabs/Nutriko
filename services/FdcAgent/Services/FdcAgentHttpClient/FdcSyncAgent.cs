@@ -36,7 +36,7 @@ namespace FdcAgent.Models.FdcShemas.FdcSyncOptions
 
     public class FdcRequestParams
     {
-        public Array fdcIds { get; set; }
+        public IList<int> fdcIds { get; set; }
         public string format { get; set; }
         public Array nutrients { get; set; }
     }

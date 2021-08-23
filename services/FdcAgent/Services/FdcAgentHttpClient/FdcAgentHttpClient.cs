@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using FdcAgent.Models.FdcShemas;
 using FdcAgent.Models.FdcShemas.FdcSyncOptions;
+using FdcAgent.Services.FoodBusService;
 
 namespace FdcAgent.Services.FoodStreamService
 {
@@ -33,24 +34,29 @@ namespace FdcAgent.Services.FoodStreamService
     {
         private readonly DataSources _dataSources;
         private readonly ILogger<FdcAgentHttpClient> _log;
+        private IFdcAgentBus _messageBusFdc;
         public HttpClient _client { get; }
+        private FdcAgentHttpStatus _operationStatus;
 
-        public FdcAgentHttpClient(HttpClient client, IOptions<DataSources> dataSources, ILogger<FdcAgentHttpClient> log)
+        public FdcAgentHttpClient(HttpClient client, IOptions<DataSources> dataSources, ILogger<FdcAgentHttpClient> log, IFdcAgentBus messageBusFdc)
         {
             _dataSources = dataSources.Value;
             _log = log;
+            _messageBusFdc = messageBusFdc;
 
             client.BaseAddress = new Uri(_dataSources.Usda.FoodDataCentral.BaseUrl);
             _client = client;
         }
 
-        public async Task<IList<SRLegacyFoodItem>> GetFoods(int[] fdcIds)
+        public async Task<FdcAgentHttpStatus> GetFoods(IList<int> fdcIds)
         {
             FdcRequestParams fdc = new FdcRequestParams(){
                 fdcIds = fdcIds,
                 format = _dataSources.Usda.RequestBody.format,
                 nutrients = _dataSources.Usda.RequestBody.nutrients
             };
+
+            _operationStatus = new FdcAgentHttpStatus(); 
 
             var options = new JsonSerializerOptions
             {
@@ -69,8 +75,16 @@ namespace FdcAgent.Services.FoodStreamService
             );
 
             using var responseStream = await response.Content.ReadAsStreamAsync();
+            var jsonItems =  await JsonSerializer.DeserializeAsync<IList<SRLegacyFoodItem>>(responseStream, options);
+            
+            foreach (var item in jsonItems)
+            {
+                _messageBusFdc.PublishFdcMessage(item);
+                _operationStatus.count++;
+            }
+            _operationStatus.message = $"Proccessed {_operationStatus.count}...";
 
-            return await JsonSerializer.DeserializeAsync<IList<SRLegacyFoodItem>>(responseStream, options);
+            return _operationStatus;
         }
     }
 }

@@ -37,20 +37,51 @@ namespace FdcAgent.Controllers
         [HttpPost("agent/import")]
         public async Task<IActionResult> AgentImport()
         {
-            _msgConsumer.ConsoleLogger();
+            IList<int> list = new List<int>();
+
+            list = _msgConsumer.GetFdcIds();
             var parserReply = await _blobParser.ReadBlob();
             _msgConsumer.Dispose();
-            
+
+            dynamic items = await GetFoods(list);
 
             return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
 
-        [HttpGet("GetFoods")]
-        public async Task<dynamic> GetFoods()
+        [HttpGet("agent/getfoods")]
+        private async Task<IActionResult> GetFoods(IList<int> idList)
         {
-            var res = await _httpClient.GetFoods(new int[] {171705, 169760});
+            var res = await _httpClient.GetFoods(idList);
+            Console.WriteLine("Requesting items to remote API...");
 
-            return JsonSerializer.Serialize(res);
+            return new OkObjectResult(JsonSerializer.Serialize(res));
+        }
+
+        // TEST ACTIONS ------------------------------------------
+
+        [HttpGet("test/getfoods")]
+        public async Task<IActionResult> testGetFoods(IList<int> idList)
+        {
+            var res = await _httpClient.GetFoods(new List<int> {171705, 169760});
+            Console.WriteLine("Requesting items to remote API...");
+
+            return new OkObjectResult(JsonSerializer.Serialize(res));
+        }
+        [HttpGet("test/echo")]
+        public async Task<IActionResult> Log()
+        {
+            IList<int> list = new List<int>();
+
+            list = _msgConsumer.GetFdcIds();
+            var parserReply = await _blobParser.ReadBlob();
+            _msgConsumer.Dispose();
+
+            foreach (var item in list)
+            {
+                _logger.LogInformation($"Heard ID: {item}");
+            }
+
+            return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
 
     }

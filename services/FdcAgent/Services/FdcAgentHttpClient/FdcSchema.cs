@@ -5,6 +5,12 @@ using System.Text.Json.Serialization;
 
 namespace FdcAgent.Models.FdcShemas
 {
+    public class FdcAgentHttpStatus
+    {
+        public int count { get; set; }
+        public string message { get; set; }
+    }
+
     public class SRLegacyFoodItem
     {
         public int fdcId { get; set; }

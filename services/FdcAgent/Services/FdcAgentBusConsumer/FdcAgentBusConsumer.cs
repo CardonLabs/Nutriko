@@ -9,6 +9,8 @@ using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
 
+using FdcAgent.Models.FdcShemas;
+
 namespace FdcAgent.Services.FoodBusService
 {
     public static class FdcAgentBusConsumerExtension
@@ -21,7 +23,10 @@ namespace FdcAgent.Services.FoodBusService
     public class FdcBusConsumer : IDisposable, IFdcAgentBusConsumer
     {
         private IDisposable _foodSubscription;
+         private IDisposable _foodItemsSubscription;
         private IFdcAgentBus _fdcBus;
+        private IList<int> _fdcIdList;
+        private IList<SRLegacyFoodItem> _fdcFoodItemList;
 
         public FdcBusConsumer(IFdcAgentBus fdcBus)
         {
@@ -33,12 +38,32 @@ namespace FdcAgent.Services.FoodBusService
             _foodSubscription.Dispose();
         }
 
-        public void ConsoleLogger()
+        public void DisposeFood()
         {
-            _foodSubscription = _fdcBus.FoodBus.Subscribe( id => {
-                System.Console.WriteLine($"Logging message: {id.FdcId} at " + DateTime.Now);
+            _foodItemsSubscription.Dispose();
+        }
+
+        public IList<int> GetFdcIds()
+        {
+            _fdcIdList = new List<int>();
+
+            _foodSubscription = _fdcBus.FoodBus.Subscribe( ids => {
+                _fdcIdList.Add(ids.FdcId);
+            }); 
+
+            return _fdcIdList;
+
+        }
+
+        public IList<SRLegacyFoodItem> GetFdcFoodItems()
+        {
+            _fdcFoodItemList = new List<SRLegacyFoodItem>();
+
+            _foodItemsSubscription = _fdcBus.FoodBusFdc.Subscribe( item => {
+                _fdcFoodItemList.Add(item);
             });
-            
+
+            return _fdcFoodItemList;
         }
     }
 }

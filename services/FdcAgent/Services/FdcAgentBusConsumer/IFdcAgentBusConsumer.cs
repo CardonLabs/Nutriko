@@ -8,11 +8,15 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 
+using FdcAgent.Models.FdcShemas;
+
 namespace FdcAgent.Services.FoodBusService
 {
     public interface IFdcAgentBusConsumer
     {
-        void ConsoleLogger();
         void Dispose();
+        void DisposeFood();
+        IList<int> GetFdcIds();
+        IList<SRLegacyFoodItem> GetFdcFoodItems();
     }
 }

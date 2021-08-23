@@ -8,6 +8,8 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 
+using FdcAgent.Models.FdcShemas;
+
 namespace FdcAgent.Services.FoodBusService
 {
     public static class FdcAgentBusExtension
@@ -21,11 +23,14 @@ namespace FdcAgent.Services.FoodBusService
     public class FdcAgentBus : IFdcAgentBus
     {
         private Subject<FdcAgentMessage> _foodBus;
+        private Subject<SRLegacyFoodItem> _foodBusFdc;
         public IObservable<FdcAgentMessage> FoodBus => _foodBus;
+        public IObservable<SRLegacyFoodItem> FoodBusFdc => _foodBusFdc;
 
         public FdcAgentBus()
         {
             _foodBus = new Subject<FdcAgentMessage>();
+            _foodBusFdc = new Subject<SRLegacyFoodItem>();
         }
 
         public void AllItemsProcessed() 
@@ -44,6 +49,19 @@ namespace FdcAgent.Services.FoodBusService
                 _foodBus.OnError(e);
             }
 
+        }
+
+        public void PublishFdcMessage(SRLegacyFoodItem message)
+        {
+            try
+            {
+                _foodBusFdc.OnNext(message);
+            }
+            catch (Exception e)
+            {
+                
+                _foodBusFdc.OnError(e);
+            }
         }
     }
 }

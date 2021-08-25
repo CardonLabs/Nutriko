@@ -12,6 +12,7 @@ using System.Text.Json;
 using FdcAgent.Services.BlobParserService;
 using FdcAgent.Services.FoodStreamService;
 using FdcAgent.Services.FoodBusService;
+using FdcAgent.Services.CosmosClientService;
 using FdcAgent.Models.FdcShemas;
 
 namespace FdcAgent.Controllers
@@ -24,26 +25,33 @@ namespace FdcAgent.Controllers
         private IFdcAgentBlobParser _blobParser;
         private IFdcAgentBusConsumer _msgConsumer;
         private IFdcAgentHttpClient _httpClient;
+        private IFdcAgentCosmosClient _cosmosClient;
 
         public FdcAgentController(ILogger<FdcAgentController> logger, IFdcAgentBlobParser blobParser, IFdcAgentBusConsumer msgConsumer, 
-                IFdcAgentHttpClient httpClient)
+                IFdcAgentHttpClient httpClient, IFdcAgentCosmosClient cosmosClient)
         {
             _logger = logger;
             _blobParser = blobParser;
             _msgConsumer = msgConsumer;
             _httpClient = httpClient;
+            _cosmosClient = cosmosClient;
         }
 
         [HttpPost("agent/import")]
         public async Task<IActionResult> AgentImport()
         {
             IList<int> list = new List<int>();
+            list = _msgConsumer.SubscribeFdcIds();
 
-            list = _msgConsumer.GetFdcIds();
+            IList<SRLegacyFoodItem> fdcFoodList = new List<SRLegacyFoodItem>();
+            fdcFoodList = _msgConsumer.SubscribeFdcFoods();
+
             var parserReply = await _blobParser.ReadBlob();
-            _msgConsumer.Dispose();
+            var items = await _httpClient.GetFoods(list);
+            dynamic t = await _cosmosClient.StartImport(fdcFoodList);
 
-            dynamic items = await GetFoods(list);
+            _msgConsumer.Dispose();
+            _msgConsumer.DisposeFood();
 
             return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
@@ -59,20 +67,19 @@ namespace FdcAgent.Controllers
 
         // TEST ACTIONS ------------------------------------------
 
-        [HttpGet("test/getfoods")]
-        public async Task<IActionResult> testGetFoods(IList<int> idList)
+        [HttpGet("test/t1")]
+        public string testGetFoods()
         {
-            var res = await _httpClient.GetFoods(new List<int> {171705, 169760});
-            Console.WriteLine("Requesting items to remote API...");
+            //_cosmosClient.StartImport();
 
-            return new OkObjectResult(JsonSerializer.Serialize(res));
+            return "done";
         }
         [HttpGet("test/echo")]
         public async Task<IActionResult> Log()
         {
             IList<int> list = new List<int>();
 
-            list = _msgConsumer.GetFdcIds();
+            list = _msgConsumer.SubscribeFdcIds();
             var parserReply = await _blobParser.ReadBlob();
             _msgConsumer.Dispose();
 

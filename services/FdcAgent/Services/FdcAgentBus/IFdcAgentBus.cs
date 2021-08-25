@@ -17,6 +17,7 @@ namespace FdcAgent.Services.FoodBusService
         void PublishMessage(FdcAgentMessage message);
         void PublishFdcMessage(SRLegacyFoodItem message);
         void AllItemsProcessed();
+        void FdcFoodListCompleted();
         IObservable<FdcAgentMessage> FoodBus{ get; }
         IObservable<SRLegacyFoodItem> FoodBusFdc{ get; }
     }

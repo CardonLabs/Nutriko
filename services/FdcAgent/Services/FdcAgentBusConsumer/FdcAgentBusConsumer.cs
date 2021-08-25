@@ -23,7 +23,7 @@ namespace FdcAgent.Services.FoodBusService
     public class FdcBusConsumer : IDisposable, IFdcAgentBusConsumer
     {
         private IDisposable _foodSubscription;
-         private IDisposable _foodItemsSubscription;
+        private IDisposable _foodItemsSubscription;
         private IFdcAgentBus _fdcBus;
         private IList<int> _fdcIdList;
         private IList<SRLegacyFoodItem> _fdcFoodItemList;
@@ -35,15 +35,17 @@ namespace FdcAgent.Services.FoodBusService
 
         public void Dispose()
         {
-            _foodSubscription.Dispose();
+            if (_foodSubscription != null)
+                _foodSubscription.Dispose();
         }
 
         public void DisposeFood()
         {
-            _foodItemsSubscription.Dispose();
+            if (_foodItemsSubscription != null)
+                _foodItemsSubscription.Dispose();
         }
 
-        public IList<int> GetFdcIds()
+        public IList<int> SubscribeFdcIds()
         {
             _fdcIdList = new List<int>();
 
@@ -55,7 +57,7 @@ namespace FdcAgent.Services.FoodBusService
 
         }
 
-        public IList<SRLegacyFoodItem> GetFdcFoodItems()
+        public IList<SRLegacyFoodItem> SubscribeFdcFoods()
         {
             _fdcFoodItemList = new List<SRLegacyFoodItem>();
 

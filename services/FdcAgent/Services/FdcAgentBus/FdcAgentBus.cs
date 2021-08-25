@@ -38,6 +38,11 @@ namespace FdcAgent.Services.FoodBusService
             _foodBus.OnCompleted();
         }
 
+        public void FdcFoodListCompleted() 
+        {
+            _foodBusFdc.OnCompleted();
+        }
+
         public void PublishMessage(FdcAgentMessage message)
         {
             try

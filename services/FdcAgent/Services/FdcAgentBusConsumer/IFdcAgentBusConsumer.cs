@@ -16,7 +16,7 @@ namespace FdcAgent.Services.FoodBusService
     {
         void Dispose();
         void DisposeFood();
-        IList<int> GetFdcIds();
-        IList<SRLegacyFoodItem> GetFdcFoodItems();
+        IList<int> SubscribeFdcIds();
+        IList<SRLegacyFoodItem> SubscribeFdcFoods();
     }
 }

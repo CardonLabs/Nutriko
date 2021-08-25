@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using FdcAgent.Services.BlobParserService;
 using FdcAgent.Services.FoodStreamService;
 using FdcAgent.Services.FoodBusService;
+using FdcAgent.Services.CosmosClientService;
 
 namespace FdcAgent
 {
@@ -31,9 +32,11 @@ namespace FdcAgent
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddFdcAgentBusService();
+            services.AddFdcAgentCosmosClientService(Configuration);
             services.AddFdcAgentBlobParserService(Configuration);
             services.AddFdcAgentBusConsumerService();
             services.AddFdcAgentHttpClientService(Configuration);
+            
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

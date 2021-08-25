@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,9 +80,12 @@ namespace FdcAgent.Services.FoodStreamService
             
             foreach (var item in jsonItems)
             {
+                item.description = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.description);
+
                 _messageBusFdc.PublishFdcMessage(item);
                 _operationStatus.count++;
             }
+            _messageBusFdc.FdcFoodListCompleted();
             _operationStatus.message = $"Proccessed {_operationStatus.count}...";
 
             return _operationStatus;

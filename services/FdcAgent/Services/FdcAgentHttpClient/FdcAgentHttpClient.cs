@@ -80,7 +80,8 @@ namespace FdcAgent.Services.FoodStreamService
             
             foreach (var item in jsonItems)
             {
-                item.description = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.description);
+                item.id =  Guid.NewGuid().ToString();
+                item.description = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.description.ToLower());
 
                 _messageBusFdc.PublishFdcMessage(item);
                 _operationStatus.count++;

@@ -13,7 +13,7 @@ namespace FdcAgent.Models.FdcShemas
 
     public class SRLegacyFoodItem
     {
-        [JsonPropertyName("id")]
+        public string id { get; set; }
         public int fdcId { get; set; }
         public string dataType { get; set; }
         public string description { get; set; }

@@ -80,7 +80,7 @@ namespace FdcAgent.Services.CosmosClientService
 
             foreach (var food in list)
             {
-                Console.WriteLine($"func StartImport: {food.fdcId} -- {food.description}");
+                Console.WriteLine($"func StartImport:  {food.id} -- {food.fdcId} -- {food.description}");
             }
             
             return "import";

@@ -122,7 +122,6 @@ namespace FdcAgent.Services.FoodStreamService
 
                 foreach (var factor in item.nutrientConversionFactors)
                 {
-                    Console.WriteLine($"FACTORS ################# -- {factor.type}");
                     if(factor.type == ".ProteinConversionFactor")
                     {
                         foodItem.nutrientConversionFactors.proteinConversionFactor.type = factor.type;
@@ -139,8 +138,6 @@ namespace FdcAgent.Services.FoodStreamService
                         foodItem.nutrientConversionFactors.calorieConversionFactor.carbohydrateValue = factor.carbohydrateValue;
                     }
                 }
-
-                Console.WriteLine($"http service --- {JsonSerializer.Serialize<NuFoodItem>(foodItem)}");
 
                 _messageBusFdc.PublishFdcMessage(foodItem);
                 _operationStatus.count++;

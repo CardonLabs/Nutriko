@@ -16,6 +16,7 @@ namespace FdcAgent.Models.FdcShemas
         public string id { get; set; }
         public int fdcId { get; set; }
         public string dataType { get; set; }
+        public string category { get; set; }
         public string description { get; set; }
         public string publicationDate { get; set; }
         public FdcFoodCategory foodCategory { get; set; }

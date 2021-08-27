@@ -12,6 +12,7 @@ using Azure.Cosmos;
 
 using FdcAgent.Services.FoodBusService;
 using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
 
 namespace FdcAgent.Services.CosmosClientService
 {
@@ -32,8 +33,8 @@ namespace FdcAgent.Services.CosmosClientService
         private readonly FdcAgentCosmosDbConfig _cosmosDbConfig;
         private static CosmosClient _cosmosClient = null;
         private static readonly CosmosClientOptions _cosmosClientOptions;
-        private CosmosDatabase _cosmosDatabase;
-        private CosmosContainer _cosmosContainer;
+        private CosmosDatabase _cosmosDatabase = null;
+        private CosmosContainer _cosmosContainer = null;
         private IFdcAgentBusConsumer _messageConsumer;
         private IList<SRLegacyFoodItem> _itemsList;
 
@@ -75,12 +76,39 @@ namespace FdcAgent.Services.CosmosClientService
             }
         }
 
-        public async Task<dynamic> StartImport(IList<SRLegacyFoodItem> list)
+        public async Task<dynamic> StartImport(IList<NuFoodItem> list)
         {
+            if (_cosmosDatabase == null)
+                await CreateDatabase();
 
-            foreach (var food in list)
+            if (_cosmosContainer == null)
+                await CreateContainer();
+            
+            try
             {
-                Console.WriteLine($"func StartImport:  {food.id} -- {food.fdcId} -- {food.description}");
+                var itemsBucket = new List<KeyValuePair<PartitionKey, Stream>>();
+                foreach (var item in list)
+                {
+                    var stream = new MemoryStream();
+                    await JsonSerializer.SerializeAsync<NuFoodItem>(stream, item);
+
+                    itemsBucket.Add(new KeyValuePair<PartitionKey, Stream>(new PartitionKey(item.dataType), stream));
+                }
+
+                var parallelJobs = new List<Task>();
+                foreach (var (key, value) in itemsBucket)
+                {
+                    parallelJobs.Add(_cosmosContainer.CreateItemStreamAsync(value, key).ContinueWith( x => {
+                        var response = x.Result;
+                        Console.WriteLine($"Import {response.ClientRequestId} has status {response.Status} with message {response.Headers}");
+                    }));
+                }
+                await Task.WhenAll(parallelJobs);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
             
             return "import";

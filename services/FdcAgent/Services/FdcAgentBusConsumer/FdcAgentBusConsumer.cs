@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Reactive.Disposables;
 
 using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
 
 namespace FdcAgent.Services.FoodBusService
 {
@@ -26,7 +27,7 @@ namespace FdcAgent.Services.FoodBusService
         private IDisposable _foodItemsSubscription;
         private IFdcAgentBus _fdcBus;
         private IList<int> _fdcIdList;
-        private IList<SRLegacyFoodItem> _fdcFoodItemList;
+        private IList<NuFoodItem> _fdcFoodItemList;
 
         public FdcBusConsumer(IFdcAgentBus fdcBus)
         {
@@ -57,9 +58,9 @@ namespace FdcAgent.Services.FoodBusService
 
         }
 
-        public IList<SRLegacyFoodItem> SubscribeFdcFoods()
+        public IList<NuFoodItem> SubscribeFdcFoods()
         {
-            _fdcFoodItemList = new List<SRLegacyFoodItem>();
+            _fdcFoodItemList = new List<NuFoodItem>();
 
             _foodItemsSubscription = _fdcBus.FoodBusFdc.Subscribe( item => {
                 _fdcFoodItemList.Add(item);

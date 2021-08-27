@@ -14,6 +14,7 @@ using FdcAgent.Services.FoodStreamService;
 using FdcAgent.Services.FoodBusService;
 using FdcAgent.Services.CosmosClientService;
 using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
 
 namespace FdcAgent.Controllers
 {
@@ -43,7 +44,7 @@ namespace FdcAgent.Controllers
             IList<int> list = new List<int>();
             list = _msgConsumer.SubscribeFdcIds();
 
-            IList<SRLegacyFoodItem> fdcFoodList = new List<SRLegacyFoodItem>();
+            IList<NuFoodItem> fdcFoodList = new List<NuFoodItem>();
             fdcFoodList = _msgConsumer.SubscribeFdcFoods();
 
             var parserReply = await _blobParser.ReadBlob();

@@ -9,6 +9,7 @@ using System.Reactive.Subjects;
 using System.Reactive.Linq;
 
 using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
 
 namespace FdcAgent.Services.FoodBusService
 {
@@ -17,6 +18,6 @@ namespace FdcAgent.Services.FoodBusService
         void Dispose();
         void DisposeFood();
         IList<int> SubscribeFdcIds();
-        IList<SRLegacyFoodItem> SubscribeFdcFoods();
+        IList<NuFoodItem> SubscribeFdcFoods();
     }
 }

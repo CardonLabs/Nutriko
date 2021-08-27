@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using FdcAgent.Models.FdcShemas;
 using FdcAgent.Models.FdcShemas.FdcSyncOptions;
+using FdcAgent.Models.FdcShemas.Nutriko;
 using FdcAgent.Services.FoodBusService;
 
 namespace FdcAgent.Services.FoodStreamService
@@ -57,7 +58,7 @@ namespace FdcAgent.Services.FoodStreamService
                 nutrients = _dataSources.Usda.RequestBody.nutrients
             };
 
-            _operationStatus = new FdcAgentHttpStatus(); 
+            _operationStatus = new FdcAgentHttpStatus();
 
             var options = new JsonSerializerOptions
             {
@@ -80,10 +81,68 @@ namespace FdcAgent.Services.FoodStreamService
             
             foreach (var item in jsonItems)
             {
-                item.id =  Guid.NewGuid().ToString();
-                item.description = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.description.ToLower());
+                IList<NuFoodNutrient> nutrients = new List<NuFoodNutrient>();
+                foreach (var nutrient in item.foodNutrients)
+                {
+                    NuFoodNutrient nu = new NuFoodNutrient {
+                        id = nutrient.nutrient.id,
+                        name = nutrient.nutrient.name,
+                        number = nutrient.nutrient.number,
+                        unitName = nutrient.nutrient.unitName,
+                        amount = nutrient.amount
+                    };
+                    nutrients.Add(nu);
+                }
 
-                _messageBusFdc.PublishFdcMessage(item);
+                IList<NuFoodPortion> portions = new List<NuFoodPortion>();
+                foreach (var portion in item.foodPortions)
+                {
+                    NuFoodPortion por = new NuFoodPortion {
+                        name = portion.modifier,
+                        gramWeight = portion.gramWeight,
+                        amount = portion.amount
+                    };
+                    portions.Add(por);
+                }
+
+                NuFoodItem foodItem = new NuFoodItem {
+                    id = item.fdcId.ToString(),
+                    dataType = item.dataType,
+                    category = item.foodCategory.description,
+                    name = item.description,
+                    publicationDate = item.publicationDate,
+                    foodNutrients = nutrients,
+                    foodPortions = portions,
+                    nutrientConversionFactors = new NuNutrientConversionFactors {
+                        proteinConversionFactor = new NuProteinConversionFactor(),
+                        calorieConversionFactor = new NuCalorieConversionFactor()
+                    }
+
+                };
+
+                foreach (var factor in item.nutrientConversionFactors)
+                {
+                    Console.WriteLine($"FACTORS ################# -- {factor.type}");
+                    if(factor.type == ".ProteinConversionFactor")
+                    {
+                        foodItem.nutrientConversionFactors.proteinConversionFactor.type = factor.type;
+                        foodItem.nutrientConversionFactors.proteinConversionFactor.name = factor.name;
+                        foodItem.nutrientConversionFactors.proteinConversionFactor.value = factor.value;
+                    }
+
+                    if(factor.type == ".CalorieConversionFactor")
+                    {
+                        foodItem.nutrientConversionFactors.calorieConversionFactor.type = factor.type;
+                        foodItem.nutrientConversionFactors.calorieConversionFactor.name = factor.name;
+                        foodItem.nutrientConversionFactors.calorieConversionFactor.proteinValue = factor.proteinValue;
+                        foodItem.nutrientConversionFactors.calorieConversionFactor.fatValue = factor.fatValue;
+                        foodItem.nutrientConversionFactors.calorieConversionFactor.carbohydrateValue = factor.carbohydrateValue;
+                    }
+                }
+
+                Console.WriteLine($"http service --- {JsonSerializer.Serialize<NuFoodItem>(foodItem)}");
+
+                _messageBusFdc.PublishFdcMessage(foodItem);
                 _operationStatus.count++;
             }
             _messageBusFdc.FdcFoodListCompleted();

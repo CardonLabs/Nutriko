@@ -9,6 +9,7 @@ using System.Reactive.Subjects;
 using System.Reactive.Linq;
 
 using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
 
 namespace FdcAgent.Services.FoodBusService
 {
@@ -23,14 +24,14 @@ namespace FdcAgent.Services.FoodBusService
     public class FdcAgentBus : IFdcAgentBus
     {
         private Subject<FdcAgentMessage> _foodBus;
-        private Subject<SRLegacyFoodItem> _foodBusFdc;
+        private Subject<NuFoodItem> _foodBusFdc;
         public IObservable<FdcAgentMessage> FoodBus => _foodBus;
-        public IObservable<SRLegacyFoodItem> FoodBusFdc => _foodBusFdc;
+        public IObservable<NuFoodItem> FoodBusFdc => _foodBusFdc;
 
         public FdcAgentBus()
         {
             _foodBus = new Subject<FdcAgentMessage>();
-            _foodBusFdc = new Subject<SRLegacyFoodItem>();
+            _foodBusFdc = new Subject<NuFoodItem>();
         }
 
         public void AllItemsProcessed() 
@@ -56,7 +57,7 @@ namespace FdcAgent.Services.FoodBusService
 
         }
 
-        public void PublishFdcMessage(SRLegacyFoodItem message)
+        public void PublishFdcMessage(NuFoodItem message)
         {
             try
             {

@@ -40,4 +40,11 @@ namespace FdcAgent.Models.FdcShemas.FdcSyncOptions
         public string format { get; set; }
         public Array nutrients { get; set; }
     }
+
+    public class FdcRequestParams2
+    {
+        public IList<int> fdcIds { get; set; }
+        public string format { get; set; }
+        public Array nutrients { get; set; }
+    }
 }

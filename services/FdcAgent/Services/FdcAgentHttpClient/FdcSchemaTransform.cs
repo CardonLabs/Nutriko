@@ -16,6 +16,8 @@ namespace FdcAgent.Models.FdcShemas.Nutriko
             }
         }
 
+        public string type { get; set; }
+
         private string _dataType;
         public string dataType {
             get { return _dataType; }

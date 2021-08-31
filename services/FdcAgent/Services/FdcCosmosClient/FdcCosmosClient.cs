@@ -92,7 +92,7 @@ namespace FdcAgent.Services.CosmosClientService
                     var stream = new MemoryStream();
                     await JsonSerializer.SerializeAsync<NuFoodItem>(stream, item);
 
-                    itemsBucket.Add(new KeyValuePair<PartitionKey, Stream>(new PartitionKey(item.dataType), stream));
+                    itemsBucket.Add(new KeyValuePair<PartitionKey, Stream>(new PartitionKey(item.type), stream));
                 }
 
                 var parallelJobs = new List<Task>();

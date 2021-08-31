@@ -48,7 +48,7 @@ namespace FdcAgent.Controllers
             fdcFoodList = _msgConsumer.SubscribeFdcFoods();
 
             var parserReply = await _blobParser.ReadBlob();
-            var items = await _httpClient.GetFoods(list);
+            //var items = await _httpClient.GetFoods(list);
             dynamic t = await _cosmosClient.StartImport(fdcFoodList);
 
             _msgConsumer.Dispose();
@@ -57,23 +57,39 @@ namespace FdcAgent.Controllers
             return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
 
-        [HttpGet("agent/getfoods")]
-        private async Task<IActionResult> GetFoods(IList<int> idList)
-        {
-            var res = await _httpClient.GetFoods(idList);
-            Console.WriteLine("Requesting items to remote API...");
+        // [HttpGet("agent/getfoods")]
+        // private async Task<IActionResult> GetFoods(IList<int> idList)
+        // {
+        //     var res = await _httpClient.GetFoods(idList);
+        //     Console.WriteLine("Requesting items to remote API...");
 
-            return new OkObjectResult(JsonSerializer.Serialize(res));
-        }
+        //     return new OkObjectResult(JsonSerializer.Serialize(res));
+        // }
 
         // TEST ACTIONS ------------------------------------------
 
         [HttpGet("test/t1")]
-        public string testGetFoods()
+        public async Task<IActionResult> testGetFoods()
         {
-            //_cosmosClient.StartImport();
+            IList<int> list = new List<int>();
+            list = _msgConsumer.SubscribeFdcIds();
 
-            return "done";
+            IList<NuFoodItem> fdcFoodList = new List<NuFoodItem>();
+            fdcFoodList = _msgConsumer.SubscribeFdcFoods();
+
+            var parserReply = await _blobParser.ReadBlob();
+            var items = await _httpClient.GetFoods2(list);
+            dynamic t = await _cosmosClient.StartImport(fdcFoodList);
+
+            _msgConsumer.Dispose();
+            _msgConsumer.DisposeFood();
+
+            foreach (var item in fdcFoodList)
+            {
+                Console.WriteLine($"Controller -- {item.id} -- {item.name}");
+            }
+
+            return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
         [HttpGet("test/echo")]
         public async Task<IActionResult> Log()

@@ -5,10 +5,18 @@ using System.Text.Json.Serialization;
 
 namespace FdcAgent.Models.FdcShemas
 {
+    public class FdcAgentHttpStatus
+    {
+        public int count { get; set; }
+        public string message { get; set; }
+    }
+
     public class SRLegacyFoodItem
     {
+        public string id { get; set; }
         public int fdcId { get; set; }
         public string dataType { get; set; }
+        public string category { get; set; }
         public string description { get; set; }
         public string publicationDate { get; set; }
         public FdcFoodCategory foodCategory { get; set; }

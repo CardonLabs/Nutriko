@@ -8,12 +8,18 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 
+using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
+
 namespace FdcAgent.Services.FoodBusService
 {
     public interface IFdcAgentBus
     {
         void PublishMessage(FdcAgentMessage message);
+        void PublishFdcMessage(NuFoodItem message);
         void AllItemsProcessed();
+        void FdcFoodListCompleted();
         IObservable<FdcAgentMessage> FoodBus{ get; }
+        IObservable<NuFoodItem> FoodBusFdc{ get; }
     }
 }

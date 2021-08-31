@@ -12,7 +12,9 @@ using System.Text.Json;
 using FdcAgent.Services.BlobParserService;
 using FdcAgent.Services.FoodStreamService;
 using FdcAgent.Services.FoodBusService;
+using FdcAgent.Services.CosmosClientService;
 using FdcAgent.Models.FdcShemas;
+using FdcAgent.Models.FdcShemas.Nutriko;
 
 namespace FdcAgent.Controllers
 {
@@ -24,33 +26,74 @@ namespace FdcAgent.Controllers
         private IFdcAgentBlobParser _blobParser;
         private IFdcAgentBusConsumer _msgConsumer;
         private IFdcAgentHttpClient _httpClient;
+        private IFdcAgentCosmosClient _cosmosClient;
 
         public FdcAgentController(ILogger<FdcAgentController> logger, IFdcAgentBlobParser blobParser, IFdcAgentBusConsumer msgConsumer, 
-                IFdcAgentHttpClient httpClient)
+                IFdcAgentHttpClient httpClient, IFdcAgentCosmosClient cosmosClient)
         {
             _logger = logger;
             _blobParser = blobParser;
             _msgConsumer = msgConsumer;
             _httpClient = httpClient;
+            _cosmosClient = cosmosClient;
         }
 
         [HttpPost("agent/import")]
         public async Task<IActionResult> AgentImport()
         {
-            _msgConsumer.ConsoleLogger();
+            IList<int> list = new List<int>();
+            list = _msgConsumer.SubscribeFdcIds();
+
+            IList<NuFoodItem> fdcFoodList = new List<NuFoodItem>();
+            fdcFoodList = _msgConsumer.SubscribeFdcFoods();
+
             var parserReply = await _blobParser.ReadBlob();
+            var operation = await _httpClient.GetFdcFoodItems(list);
+            dynamic dbOperation = await _cosmosClient.StartImport(fdcFoodList);
+
             _msgConsumer.Dispose();
-            
+            _msgConsumer.DisposeFood();
 
             return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
 
-        [HttpGet("GetFoods")]
-        public async Task<dynamic> GetFoods()
-        {
-            var res = await _httpClient.GetFoods(new int[] {171705, 169760});
+        // TEST ACTIONS ------------------------------------------
 
-            return JsonSerializer.Serialize(res);
+        [HttpGet("test/t1")]
+        public async Task<IActionResult> testGetFoods()
+        {
+            IList<int> list = new List<int>();
+            list = _msgConsumer.SubscribeFdcIds();
+
+            IList<NuFoodItem> fdcFoodList = new List<NuFoodItem>();
+            fdcFoodList = _msgConsumer.SubscribeFdcFoods();
+
+            var parserReply = await _blobParser.ReadBlob();
+            //var items = await _httpClient.GetFdcFoodItems(list);
+            dynamic t = await _cosmosClient.StartImport(fdcFoodList);
+
+            _msgConsumer.Dispose();
+            _msgConsumer.DisposeFood();
+
+            
+
+            return new OkObjectResult(JsonSerializer.Serialize(parserReply));
+        }
+        [HttpGet("test/echo")]
+        public async Task<IActionResult> Log()
+        {
+            IList<int> list = new List<int>();
+
+            list = _msgConsumer.SubscribeFdcIds();
+            var parserReply = await _blobParser.ReadBlob();
+            _msgConsumer.Dispose();
+
+            foreach (var item in list)
+            {
+                _logger.LogInformation($"Heard ID: {item}");
+            }
+
+            return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
 
     }

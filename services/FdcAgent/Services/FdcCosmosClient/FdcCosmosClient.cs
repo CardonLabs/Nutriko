@@ -30,16 +30,18 @@ namespace FdcAgent.Services.CosmosClientService
 
     public class FdcAgentCosmosClient : IFdcAgentCosmosClient
     {
+        private ILogger<FdcAgentCosmosClient> _logger;
         private readonly FdcAgentCosmosDbConfig _cosmosDbConfig;
         private static CosmosClient _cosmosClient = null;
-        private static readonly CosmosClientOptions _cosmosClientOptions;
+        //private static readonly CosmosClientOptions _cosmosClientOptions;
         private CosmosDatabase _cosmosDatabase = null;
         private CosmosContainer _cosmosContainer = null;
         private IFdcAgentBusConsumer _messageConsumer;
-        private IList<SRLegacyFoodItem> _itemsList;
+        //private IList<SRLegacyFoodItem> _itemsList;
 
-        public FdcAgentCosmosClient(IOptions<FdcAgentCosmosDbConfig> options, IFdcAgentBusConsumer messageConsumer)
+        public FdcAgentCosmosClient(ILogger<FdcAgentCosmosClient> logger, IOptions<FdcAgentCosmosDbConfig> options, IFdcAgentBusConsumer messageConsumer)
         {
+            _logger = logger;
             _messageConsumer = messageConsumer;
             _cosmosDbConfig = options.Value;
             _cosmosClient = new CosmosClient(_cosmosDbConfig.endPointUrl, _cosmosDbConfig.authorizationKey);
@@ -98,10 +100,11 @@ namespace FdcAgent.Services.CosmosClientService
                 var parallelJobs = new List<Task>();
                 foreach (var (key, value) in itemsBucket)
                 {
-                    parallelJobs.Add(_cosmosContainer.CreateItemStreamAsync(value, key).ContinueWith( x => {
-                        var response = x.Result;
-                        Console.WriteLine($"Import {response.ClientRequestId} has status {response.Status} with message {response.Headers}");
-                    }));
+                    parallelJobs.Add(_cosmosContainer.CreateItemStreamAsync(value, key));
+                    // .ContinueWith( x => {
+                    //     var response = x.Result;
+                    //     Console.WriteLine($"Import {response.ClientRequestId} has status {response.Status} with message {response.Headers}");
+                    // }));
                 }
                 await Task.WhenAll(parallelJobs);
             }

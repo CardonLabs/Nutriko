@@ -48,23 +48,14 @@ namespace FdcAgent.Controllers
             fdcFoodList = _msgConsumer.SubscribeFdcFoods();
 
             var parserReply = await _blobParser.ReadBlob();
-            //var items = await _httpClient.GetFoods(list);
-            dynamic t = await _cosmosClient.StartImport(fdcFoodList);
+            var operation = await _httpClient.GetFdcFoodItems(list);
+            dynamic dbOperation = await _cosmosClient.StartImport(fdcFoodList);
 
             _msgConsumer.Dispose();
             _msgConsumer.DisposeFood();
 
             return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }
-
-        // [HttpGet("agent/getfoods")]
-        // private async Task<IActionResult> GetFoods(IList<int> idList)
-        // {
-        //     var res = await _httpClient.GetFoods(idList);
-        //     Console.WriteLine("Requesting items to remote API...");
-
-        //     return new OkObjectResult(JsonSerializer.Serialize(res));
-        // }
 
         // TEST ACTIONS ------------------------------------------
 
@@ -78,16 +69,13 @@ namespace FdcAgent.Controllers
             fdcFoodList = _msgConsumer.SubscribeFdcFoods();
 
             var parserReply = await _blobParser.ReadBlob();
-            var items = await _httpClient.GetFoods2(list);
+            //var items = await _httpClient.GetFdcFoodItems(list);
             dynamic t = await _cosmosClient.StartImport(fdcFoodList);
 
             _msgConsumer.Dispose();
             _msgConsumer.DisposeFood();
 
-            foreach (var item in fdcFoodList)
-            {
-                Console.WriteLine($"Controller -- {item.id} -- {item.name}");
-            }
+            
 
             return new OkObjectResult(JsonSerializer.Serialize(parserReply));
         }

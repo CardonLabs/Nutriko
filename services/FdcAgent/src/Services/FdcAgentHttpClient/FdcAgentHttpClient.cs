@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,6 +16,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Azure;
+using Azure.Core;
 
 using FdcAgent.Models.FdcShemas;
 using FdcAgent.Models.FdcShemas.FdcSyncOptions;
@@ -37,7 +40,7 @@ namespace FdcAgent.Services.FoodStreamService
     public class FdcAgentHttpClient : IFdcAgentHttpClient
     {
         private readonly DataSources _dataSources;
-        private readonly ILogger<FdcAgentHttpClient> _log;
+        private readonly ILogger<FdcAgentHttpClient> _logger;
         private IFdcAgentBus _messageBusFdc;
         public HttpClient _client { get; }
         private JsonSerializerOptions _options = new JsonSerializerOptions{
@@ -48,7 +51,7 @@ namespace FdcAgent.Services.FoodStreamService
         public FdcAgentHttpClient(HttpClient client, IOptions<DataSources> dataSources, ILogger<FdcAgentHttpClient> log, IFdcAgentBus messageBusFdc)
         {
             _dataSources = dataSources.Value;
-            _log = log;
+            _logger = log;
             _messageBusFdc = messageBusFdc;
 
             client.BaseAddress = new Uri(_dataSources.Usda.FoodDataCentral.BaseUrl);
@@ -72,6 +75,8 @@ namespace FdcAgent.Services.FoodStreamService
                         await semaphoreSlim.WaitAsync();
                         try
                         {
+                            _logger.LogInformation($"Requesting item id: {id} - at {DateTime.Now}");
+
                             FdcRequestParams requestParams = new FdcRequestParams(){
                                 fdcIds = new List<int> { id },
                                 format = _dataSources.Usda.RequestBody.format,
@@ -90,12 +95,26 @@ namespace FdcAgent.Services.FoodStreamService
                             );
                             response.EnsureSuccessStatusCode();
 
+                            _logger.LogInformation($"Delaying request for throttling");
+                            await Task.Delay(TimeSpan.FromSeconds(3));
+
                             using var responseStream = await response.Content.ReadAsStreamAsync();
                             var item =  await JsonSerializer.DeserializeAsync<IList<SRLegacyFoodItem>>(responseStream, _options);
 
-                            NuFoodItem nuFoodItem = this.TransformItem(item[0]);
-                            _messageBusFdc.PublishFdcMessage(nuFoodItem);
-                            responses.Add(nuFoodItem);
+                            if (item != null)
+                            {
+                                _logger.LogInformation($"********** {item[0].fdcId}");
+
+                                if(item[0].foodPortions == null)
+                                     _logger.LogInformation($" ####### {item[0].fdcId} #### - no portions");
+
+                                NuFoodItem nuFoodItem = this.TransformItem(item[0]);
+                                _messageBusFdc.PublishFdcMessage(nuFoodItem);
+                                responses.Add(nuFoodItem);
+                                
+                                _logger.LogInformation($"Task end");
+                                
+                            }
                             
                         }
                         finally
@@ -105,7 +124,7 @@ namespace FdcAgent.Services.FoodStreamService
                     })
                 );
                 
-            }
+            } 
             await Task.WhenAll(httpTasks);
 
             /*
@@ -135,14 +154,28 @@ namespace FdcAgent.Services.FoodStreamService
             }
 
             IList<NuFoodPortion> portions = new List<NuFoodPortion>();
-            foreach (var portion in item.foodPortions)
+            if(item.foodPortions == null)
             {
                 NuFoodPortion por = new NuFoodPortion {
-                    name = portion.modifier,
-                    gramWeight = portion.gramWeight,
-                    amount = portion.amount
+                    name = "",
+                    gramWeight = 0,
+                    amount = 0
                 };
                 portions.Add(por);
+
+            }
+
+            if(item.foodPortions != null)
+            {
+                foreach (var portion in item.foodPortions)
+                {
+                    NuFoodPortion por = new NuFoodPortion {
+                        name = portion.modifier,
+                        gramWeight = portion.gramWeight,
+                        amount = portion.amount
+                    };
+                    portions.Add(por);
+                }
             }
 
             NuFoodItem foodItem = new NuFoodItem {

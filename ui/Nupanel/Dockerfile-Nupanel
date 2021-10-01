@@ -1,0 +1,19 @@
+
+FROM node:latest as build
+
+WORKDIR /src
+COPY . ./
+
+RUN npm install
+RUN npm run build --prod
+
+
+#########################
+
+
+FROM nginx:latest
+
+WORKDIR /app
+COPY --from=build /src/dist/Nupanel /usr/share/nginx/html
+
+EXPOSE 80

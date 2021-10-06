@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using NuRecipesClient.Services.Recipes;
+
 namespace NuRecipesClient.Controllers
 {
     [ApiController]
@@ -13,15 +15,18 @@ namespace NuRecipesClient.Controllers
     {
 
         private readonly ILogger<NuRecipesClientController> _logger;
+        private IRecipesClient _recipesClient;
 
-        public NuRecipesClientController(ILogger<NuRecipesClientController> logger)
+        public NuRecipesClientController(ILogger<NuRecipesClientController> logger, IRecipesClient recipesClient)
         {
             _logger = logger;
+            _recipesClient = recipesClient;
         }
 
         [HttpGet("test")]
         public string Get()
         {
+            _recipesClient.PublishRecipeEvent();
             return "hello";
         }
     }

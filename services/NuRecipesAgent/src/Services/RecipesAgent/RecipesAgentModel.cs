@@ -15,6 +15,7 @@ namespace NuRecipesAgent.Models.Options
     {
         public string EndPoint { get; set; }
         public string HubName { get; set; }
+        public string ConsumerGroup { get; set; }
 
     }
 

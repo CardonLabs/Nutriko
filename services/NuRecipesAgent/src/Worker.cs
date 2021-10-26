@@ -5,9 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Azure.Messaging.EventHubs;
-using Azure.Messaging.EventHubs.Consumer;
-using Azure.Messaging.EventHubs.Processor;
 
 using NuRecipesAgent.Services.Recipes;
 
@@ -17,6 +14,7 @@ namespace NuRecipesAgent
     {
         private readonly ILogger<Worker> _logger;
         private IRecipesAgent _recipesAgent;
+        
 
         public Worker(ILogger<Worker> logger, IRecipesAgent recipesAgent)
         {
@@ -28,11 +26,9 @@ namespace NuRecipesAgent
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var conf = _recipesAgent.PrintConfig();
+                _logger.LogInformation("Recipes Worker running at: {time}", DateTimeOffset.Now);
+                await _recipesAgent.StartListening(stoppingToken);
 
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                _logger.LogInformation("Config: " + conf);
-                await Task.Delay(1000, stoppingToken);
             }
         }
     }

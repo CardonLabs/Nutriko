@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 
 using NuRecipesAgent.Services.Recipes;
+using NuRecipesAgent.Services.CosmosServiceClient;
 
 namespace NuRecipesAgent
 {
@@ -22,6 +23,9 @@ namespace NuRecipesAgent
                 .ConfigureServices((hostContext, services) =>
                 {
                     IConfiguration configuration = hostContext.Configuration;
+
+                    services.AddRecipesBusService();
+                    services.AddRecipesCosmosClientExtension(configuration);
                     services.AddRecipesAgentService(configuration);
                     services.AddHostedService<Worker>();
                 });

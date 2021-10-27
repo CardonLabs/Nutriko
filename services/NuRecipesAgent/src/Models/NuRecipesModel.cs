@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using NuRecipes.Models.Foods;
+using NuRecipesAgent.Models.Foods;
 
-namespace NuRecipes.Models.Recipes
+namespace NuRecipesAgent.Models.Recipes
 {
     public class Recipe 
     {

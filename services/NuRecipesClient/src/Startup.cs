@@ -12,7 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace NuRecipes
+using NuRecipesClient.Services.Recipes;
+
+namespace NuRecipesClient
 {
     public class Startup
     {
@@ -26,11 +28,12 @@ namespace NuRecipes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRecipesClientService(Configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NuRecipes", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NuRecipesClient", Version = "v1" });
             });
         }
 
@@ -41,7 +44,7 @@ namespace NuRecipes
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NuRecipes v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NuRecipesClient v1"));
             }
 
             app.UseHttpsRedirection();

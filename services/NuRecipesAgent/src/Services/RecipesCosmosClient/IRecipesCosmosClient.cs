@@ -11,6 +11,8 @@ namespace NuRecipesAgent.Services.CosmosServiceClient
     {
         void Echo(string m);
         Task<ItemResponse<Recipe>> AddRecipeAsync(Recipe recipe);
+        Task<ItemResponse<Recipe>> UpsertRecipeAsync(Recipe recipe);
+        Task<ItemResponse<Recipe>> DeleteRecipeAsync(Recipe recipe);
         
     }
 }

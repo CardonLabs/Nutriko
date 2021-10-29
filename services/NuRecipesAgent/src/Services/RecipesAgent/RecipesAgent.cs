@@ -121,15 +121,32 @@ namespace NuRecipesAgent.Services.Recipes
 
             _recipesSubscription = _recipesBusService.recipesObservable
                 .Where( e => string.Equals( e.type, "nutriko/type/recipe"))
-                .Where( e => string.Equals( e.operation, "nutriko/operation/post"))
                 .Subscribe<RecipesBusMessage>( async e => {
 
                     _logger.LogInformation("Received recipe event: " + e.operation + " -- " + e.recipe.id);
 
                     try
                     {
-                        var operation = await _recipesCosmosClient.AddRecipeAsync(recipeItem);
-                        _logger.LogInformation("Recipe committed to store: " + operation.Value.id);
+                        /**
+                            This needs a lot of work - this is too ewwww
+                        **/
+                        if(e.operation == "nutriko/operation/post")
+                        {
+                            var operation = await _recipesCosmosClient.AddRecipeAsync(e.recipe);
+                            _logger.LogInformation("Recipe committed to store: " + e.recipe.id ?? "no insert" + " with Etag: " + operation.ETag.Value );
+                        }
+
+                        if(e.operation == "nutriko/operation/upsert")
+                        {
+                            var operation = await _recipesCosmosClient.UpsertRecipeAsync(e.recipe);
+                            _logger.LogInformation("Recipe upsert to store: " + e.recipe.id ?? "no upsert" + " with Etag: " + operation.ETag.Value);
+                        }
+
+                        if(e.operation == "nutriko/operation/delete")
+                        {
+                            var operation = await _recipesCosmosClient.DeleteRecipeAsync(e.recipe);
+                            _logger.LogInformation("Recipe deleted: " + e.recipe.id ?? "no delete" + " with Etag: " + operation.ETag.Value);
+                        }
                     }
                     catch (Exception ex)
                     {

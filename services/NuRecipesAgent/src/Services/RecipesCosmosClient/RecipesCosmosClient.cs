@@ -84,11 +84,24 @@ namespace NuRecipesAgent.Services.CosmosServiceClient
         public async Task<ItemResponse<Recipe>> AddRecipeAsync(Recipe recipe)
         {
             _logger.LogInformation("Creating item: " + recipe.id);
-            var createItem = await _cosmosContainer.CreateItemAsync<Recipe>(recipe, new PartitionKey(recipe.type));
-            _logger.LogInformation("Received -- " + createItem.GetRawResponse().ToString());
+            return await _cosmosContainer.CreateItemAsync<Recipe>(recipe, new PartitionKey(recipe.type));
 
-            return createItem;
         }
+
+        public async Task<ItemResponse<Recipe>> UpsertRecipeAsync(Recipe recipe)
+        {
+            _logger.LogInformation("Upserting item: " + recipe.id);
+            return await _cosmosContainer.UpsertItemAsync<Recipe>(recipe, new PartitionKey(recipe.type));
+
+        }
+
+        public async Task<ItemResponse<Recipe>> DeleteRecipeAsync(Recipe recipe)
+        {
+            _logger.LogInformation("Deleting item: " + recipe.id);
+            return await _cosmosContainer.DeleteItemAsync<Recipe>(recipe.id, new PartitionKey(recipe.type));
+        }
+
+        //public async Task<ItemResponse<Recipe>> GetRecipeListAsync(Recipe recipe) { }
     }
 
 }

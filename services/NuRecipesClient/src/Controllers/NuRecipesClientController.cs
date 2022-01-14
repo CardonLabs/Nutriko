@@ -32,7 +32,7 @@ namespace NuRecipesClient.Controllers
         [HttpGet("test")]
         public string Get()
         {
-            _recipesClient.GetRecipeAsync("2f26d86c-8168-47bf-a303-5cb6d0aafeba");
+            _recipesReader.GetRecipeAsync("2f26d86c-8168-47bf-a303-5cb6d0aafeba");
             return "hello";
         }
 
@@ -70,14 +70,25 @@ namespace NuRecipesClient.Controllers
         }
 
         [HttpGet("api/recipes/get")]
-        public async Task<IActionResult> GetRecipe(Recipe recipePayload)
+        public async Task<IActionResult> GetRecipe([FromBody] RecipeItem recipeItem)
         {
             string eventType = "nutriko/type/recipe";
             string eventOperation = "nutriko/operation/read";
 
-            var publishEvent = _recipesClient.PublishRecipeEvent(recipePayload, eventType, eventOperation);
+            var recipeResponse = _recipesReader.GetRecipeAsync(recipeItem.id);
 
-            return new OkObjectResult(JsonSerializer.Serialize(publishEvent));
+            return new OkObjectResult(recipeResponse.Result);
+        }
+
+        [HttpGet("api/recipes/getall")]
+        public async Task<IActionResult> GetRecipes()
+        {
+            string eventType = "nutriko/type/recipe";
+            string eventOperation = "nutriko/operation/read";
+
+            var recipeResponse = _recipesReader.GetPaginatedRecipesAsync("asdas");
+
+            return new OkObjectResult(recipeResponse.Result);
         }
     }
 }

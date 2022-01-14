@@ -54,12 +54,10 @@ namespace NuRecipesClient.Services.RecipesServiceReader
             *   Need some try catch logic here
             *
             **/
-
             RecipesReader recipesCosmosClient = new RecipesReader(logger, cosmosConfig, cosmosClient);
 
-            DatabaseResponse databaseResponse = await cosmosClient.GetDatabase(cosmosConfig.databaseId);
-
-            await databaseResponse.Database.GetContainer(cosmosConfig.containerId);
+            CosmosDatabase cosmosDatabase = cosmosClient.GetDatabase(cosmosConfig.databaseId);
+            cosmosDatabase.GetContainer(cosmosConfig.containerId);
 
             return recipesCosmosClient;
         }
@@ -79,20 +77,76 @@ namespace NuRecipesClient.Services.RecipesServiceReader
 
         }
 
-        public async Task<ItemResponse<Recipe>> GetRecipeAsync(string id)
+        public async Task<RecipesClientResponse> GetRecipeAsync(string id)
         {
+            RecipesClientResponse recipesClientResponse = new RecipesClientResponse();
+            
             _logger.LogInformation("Reading items {0}", id);
 
-            using(ResponseMessage responseMessage = await _cosmosContainer.ReadItemStreamAsync(partitionKey: new PartitionKey("recipe"), id: id))
+            try
             {
-                if(responseMessage.IsSuccessStatusCode)
-                {
-                    Recipe streamRecipe = FromStream<Recipe>(responseMessage.Content);
-                    Console.WriteLine("Item is: {0} ", streamRecipe.details.name);
-                    Console.WriteLine("Cost is: {0} ", streamRecipe.RequestCharge);
-                }
+                ItemResponse<Recipe> itemResponse = await _cosmosContainer.ReadItemAsync<Recipe>(id, new PartitionKey("recipe"));
+                recipesClientResponse.recipe = itemResponse.Value;
+                recipesClientResponse.status = HttpStatusCode.OK;
+                recipesClientResponse.message = "Item found " + itemResponse.Value.id;
+
+            }
+            catch (CosmosException exception)
+            {
+                recipesClientResponse.status = (HttpStatusCode)exception.Status;
+                recipesClientResponse.message = exception.Message;
+                _logger.LogInformation("Status: {0} - Message: {1}", exception.Status, exception.Message);
             }
 
+            return recipesClientResponse;
+
+        }
+
+        public async Task<PaginatedRecipesClientResponse<Recipe>> GetPaginatedRecipesAsync(string continuationToken)
+        {
+            //PaginatedRecipesClientResponse paginatedRecipes = new PaginatedRecipesClientResponse();
+            var conToken = continuationToken != null ? continuationToken : null;
+            int pageCount = 3;
+
+            try
+            {
+                var query = new QueryDefinition("SELECT * FROM c");
+            
+                var queryResultSetIterator = _cosmosContainer.GetItemQueryIterator<Recipe>(
+                    query,
+                    null,
+                    requestOptions: new QueryRequestOptions() { 
+                        MaxItemCount = 3,
+                    }
+                ).AsPages();
+                //var responsePages = queryResultSetIterator.AsPages();
+                
+                var result = await queryResultSetIterator.FirstOrDefaultAsync();
+                var sourceContinuationToken = JsonSerializer.Deserialize<ContinuationToken>(result.ContinuationToken).SourceContinuationToken;
+                _logger.LogInformation("Cont. Token: {0}", sourceContinuationToken);
+
+                // paginatedRecipes.message = $"Found {paginatedRecipes.recipe.Count} items";
+                // paginatedRecipes.status = HttpStatusCode.OK;
+
+                return new PaginatedRecipesClientResponse<Recipe>() {
+                    message = $"Found {result.Values.Count} items",
+                    status = HttpStatusCode.OK,
+                    continuationToken = sourceContinuationToken,
+                    recipe = result.Values.ToList()
+                };
+                 
+            }
+            catch (CosmosException e)
+            {
+                // paginatedRecipes.message = e.Message;
+                // paginatedRecipes.status = (HttpStatusCode)e.Status;
+                _logger.LogInformation("Status: {0} - Message: {1}", e.Status, e.Message);
+
+                return new PaginatedRecipesClientResponse<Recipe>() {
+                    message = e.Message,
+                    status = (HttpStatusCode)e.Status
+                };
+            }
         }
         
     }

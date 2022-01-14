@@ -58,5 +58,14 @@ namespace NuRecipesClient.Models.Recipes
     {
 
     }
+
+    public class PagedRecipesList {
+        public string ContinuationToken { get; set; }
+        public IList<Recipe> RecipesList { get; set; }
+    }
+
+    public class RecipesList {
+        public IList<Recipe> Recipes { get; set; }
+    }
 }
 

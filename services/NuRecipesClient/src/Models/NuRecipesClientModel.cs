@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Net;
-using System.Collections.Generic;
 
 using NuRecipesClient.Models.Recipes;
 
@@ -35,5 +34,10 @@ namespace NuRecipesClient.Models.Recipes
         public string Version { get; set; }
         public string QueryPlan { get; set; }
         public string SourceContinuationToken { get; set; }
+    }
+
+    public class RecipeContinuationToken
+    {
+        public string ContinuationToken { get; set; }
     }
 }

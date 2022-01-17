@@ -32,7 +32,11 @@ namespace NuRecipesClient
             services.AddRecipesClientService(Configuration);
             services.AddRecipesCosmosReaderService(Configuration);
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.AllowEmptyInputInBodyModelBinding = true;
+            });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NuRecipesClient", Version = "v1" });

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 using NuRecipesClient.Services.Recipes;
+using NuRecipesClient.Services.RecipesServiceReader;
 
 namespace NuRecipesClient
 {
@@ -29,8 +30,13 @@ namespace NuRecipesClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRecipesClientService(Configuration);
+            services.AddRecipesCosmosReaderService(Configuration);
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.AllowEmptyInputInBodyModelBinding = true;
+            });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NuRecipesClient", Version = "v1" });
